@@ -110,7 +110,7 @@ export default function Home() {
           </BioSection>
         </Section>
 
-        <Section>
+        <Section delay={0.3}>
           <Heading as="h3" variant="section-title">
             Skills
           </Heading>
@@ -128,13 +128,25 @@ export default function Home() {
           </SimpleGrid>
         </Section>
 
-        <Section>
+        <Section delay={0.4}>
           <Heading as="h3" variant="section-title">
             Volunteer Experience
           </Heading>
+          <BioSection>
+            <BioYear>09/2020 - 07/2021</BioYear>
+            Associate Technical Lead at <strong>DSC SRM</strong>
+          </BioSection>
+          <BioSection>
+            <BioYear>03/2020 - 03/2021</BioYear>
+            Web Developer at <strong>Webarch Club</strong>
+          </BioSection>
+          <BioSection>
+            <BioYear>08/2019 - Present</BioYear>
+            Web Developer at <strong>Aakash Research Labs</strong>
+          </BioSection>
         </Section>
 
-        <Section delay={0.3}>
+        <Section delay={0.5}>
           <Heading as="h3" variant="section-title">
             I ❤
           </Heading>
@@ -143,7 +155,7 @@ export default function Home() {
             Learning
           </Paragraph>
         </Section>
-        <Section delay={0.4}>
+        <Section delay={0.6}>
           <Heading as="h3" variant="section-title">
             On the web
           </Heading>
@@ -180,7 +192,7 @@ export default function Home() {
                     colorScheme="teal"
                     leftIcon={<Icon as={IoLogoInstagram} />}
                   >
-                    @abhudaym
+                    @abhuday.m
                   </Button>
                 </Link>
               </ListItem>
@@ -192,7 +204,7 @@ export default function Home() {
                     colorScheme="teal"
                     leftIcon={<Icon as={IoLogoTwitter} />}
                   >
-                    @abhudaym
+                    @MishraAbhuday
                   </Button>
                 </Link>
               </ListItem>
