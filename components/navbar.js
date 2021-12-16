@@ -102,9 +102,12 @@ const Navbar = (props) => {
                 <NextLink href="/works" passHref>
                   <MenuItem as={Link}>Works</MenuItem>
                 </NextLink>
-                <NextLink href="/posts" passHref>
-                  <MenuItem as={Link}>Posts</MenuItem>
-                </NextLink>
+                <MenuItem
+                  as={Link}
+                  href="https://drive.google.com/file/d/1gKXduJO4VesSJxlDxwQQmIXI7EXzronC/view?usp=sharing"
+                >
+                  View Resume
+                </MenuItem>
               </MenuList>
             </Menu>
           </Box>
