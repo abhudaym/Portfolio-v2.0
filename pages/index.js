@@ -76,10 +76,17 @@ export default function Home() {
           <Paragraph>
             I&apos;m a student pursuing B.Tech from SRM Institute of Science and
             Technology, Chennai with a specialization in Computer Science. I am
-            currently a part of Aakash Research Labs and DSC SRM - powered by
-            Google Developers Club as an Associate Technical Lead where
-            I&apos;ve been responsible for building things for the web with some
-            awesome people.
+            currently a part of Aakash Research Labs and have worked with DSC
+            SRM - powered by Google Developers Club as an Associate Technical
+            Lead where I&apos;ve been responsible for building things for the
+            web with some awesome people.
+            <br />
+            <br />
+            As a web developer, I enjoy bridging the gap between engineering and
+            design — combining my technical knowledge with my keen eye for
+            design to create a beautiful product. My goal is to always build
+            applications that are scalable and efficient under the hood while
+            providing engaging, pixel-perfect user experiences.
           </Paragraph>
           <Box align="center" my={4}>
             <NextLink href="/works">
