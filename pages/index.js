@@ -46,7 +46,9 @@ export default function Home() {
               align="center"
             >
               Get in touch <ChevronRightIcon />{" "}
-              <Link>abhuday.mishra@hotmail.com</Link>
+              <Link href="mailto: abhuday.mishra@hotmail.com">
+                abhuday.mishra@hotmail.com
+              </Link>
             </Box>
           </Box>
           <Box
@@ -174,7 +176,10 @@ export default function Home() {
                 </Link>
               </ListItem>
               <ListItem>
-                <Link href="https://github.com/abhudaym" target="_blank">
+                <Link
+                  href="https://www.linkedin.com/in/abhudaym/"
+                  target="_blank"
+                >
                   <Button
                     variant="ghost"
                     colorScheme="teal"
@@ -186,7 +191,10 @@ export default function Home() {
               </ListItem>
 
               <ListItem>
-                <Link href="https://github.com/abhudaym" target="_blank">
+                <Link
+                  href="https://www.instagram.com/abhuday.m/"
+                  target="_blank"
+                >
                   <Button
                     variant="ghost"
                     colorScheme="teal"
@@ -198,7 +206,7 @@ export default function Home() {
               </ListItem>
 
               <ListItem>
-                <Link href="https://github.com/abhudaym" target="_blank">
+                <Link href="https://twitter.com/MishraAbhuday" target="_blank">
                   <Button
                     variant="ghost"
                     colorScheme="teal"
