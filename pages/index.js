@@ -74,12 +74,12 @@ export default function Home() {
             Work
           </Heading>
           <Paragraph>
-            I'm a student pursuing B.Tech from SRM Institute of Science and
+            I&apos;m a student pursuing B.Tech from SRM Institute of Science and
             Technology, Chennai with a specialization in Computer Science. I am
             currently a part of Aakash Research Labs and DSC SRM - powered by
-            Google Developers Club as an Associate Technical Lead where I've
-            been responsible for building things for the web with some awesome
-            people.
+            Google Developers Club as an Associate Technical Lead where
+            I&apos;ve been responsible for building things for the web with some
+            awesome people.
           </Paragraph>
           <Box align="center" my={4}>
             <NextLink href="/works">
