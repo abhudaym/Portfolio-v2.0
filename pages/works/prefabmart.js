@@ -6,31 +6,41 @@ import Layout from "../../components/layouts/article";
 
 const Work = () => {
   return (
-    <Layout title="Inkdrop">
+    <Layout title="PrefabMart">
       <Container>
         <Title>
-          Inkdrop <Badge>2016</Badge>
+          PrefabMart <Badge>2021</Badge>
         </Title>
         <P>
-          A Markdown note-taking app with 100+ plugins, cross-platform and
-          sometihng someting something.
+          This website will list down the Prefab/Pod products that are
+          serviceable in the user input area and meet buyer demands by providing
+          them the required product &amp; services. This website was developed
+          as a prototype for Microsoft Developer League 2021.
         </P>
-        <WorkImage src="/images/works/inkdrop_01.png" alt="Inkdrop" />
-        <WorkImage src="/images/works/inkdrop_02.png" alt="Inkdrop" />
+        <WorkImage src="/images/works/prefab_01.jpg" alt="prefab" />
+        <WorkImage src="/images/works/prefab_02.jpg" alt="prefab" />
+        <WorkImage src="/images/works/prefab_03.jpg" alt="prefab" />
         <List ml={4} my={4}>
           <ListItem>
             <Meta>Website</Meta>
-            <Link href="https://www.inkdrop.app/">
-              https://www.inkdrop.app/ <ExternalLinkIcon mx="2px" />{" "}
+            <Link href="https://prefab-msft.azurewebsites.net/">
+              https://prefab-msft.azurewebsites.net/{" "}
+              <ExternalLinkIcon mx="2px" />{" "}
             </Link>
           </ListItem>
           <ListItem>
             <Meta>Platform</Meta>
-            <span>Windows/macOS/Linux/iOS/Android</span>
+            <span>Web Browser</span>
           </ListItem>
           <ListItem>
             <Meta>Stack</Meta>
-            <span>NodeJS, Electron, React Native</span>
+            <span>NodeJS, Express, MongoDB, React, Redux, Microsoft Azure</span>
+          </ListItem>
+          <ListItem>
+            <Meta>Repository</Meta>
+            <Link href="https://github.com/abhudaym/Prefab">
+              PrefabMart <ExternalLinkIcon mx="2px" />
+            </Link>
           </ListItem>
         </List>
       </Container>

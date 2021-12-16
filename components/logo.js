@@ -29,7 +29,7 @@ const Logo = () => {
             color={useColorModeValue("gray:800", "whiteAlpha.900")}
             fontFamily="M PLUS 1c"
             fontWeight="bold"
-            ml={3}
+            ml={1}
           >
             Abhuday Mishra
           </Text>

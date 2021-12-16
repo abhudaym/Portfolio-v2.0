@@ -153,8 +153,11 @@ export default function Home() {
             I ❤
           </Heading>
           <Paragraph>
-            Art, Music, Drawing, Playing Drums, Photography, Leica, Machine
-            Learning
+            Music, Sports - Badminton, Basketball, Table Tennis,{" "}
+            <Link href="https://www.youtube.com/channel/UCFF3KYmyKxdHYTU0B1-89DQ">
+              Singing
+            </Link>
+            , Typing, Piano
           </Paragraph>
         </Section>
         <Section delay={0.6}>

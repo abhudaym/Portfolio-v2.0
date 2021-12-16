@@ -6,14 +6,17 @@ import Layout from "../../components/layouts/article";
 
 const Work = () => {
   return (
-    <Layout title="Inkdrop">
+    <Layout title="eProShop">
       <Container>
         <Title>
           eProShop <Badge>2021</Badge>
         </Title>
         <P>
-          A Markdown note-taking app with 100+ plugins, cross-platform and
-          sometihng someting something.
+          This is an eCommerce web application created with MERN Stack. It has
+          user authentication system, an admin user who can add new products in
+          the app, check for order and payments and also choose which order has
+          been delivered from the store. It is also connected to PayPal for
+          payments.
         </P>
         <WorkImage src="/images/works/eproshop_02.jpg" alt="Inkdrop" />
         <WorkImage src="/images/works/eproshop_01.jpg" alt="Inkdrop" />
@@ -21,8 +24,8 @@ const Work = () => {
         <List ml={4} my={4}>
           <ListItem>
             <Meta>Website</Meta>
-            <Link href="https://www.inkdrop.app/">
-              https://www.inkdrop.app/ <ExternalLinkIcon mx="2px" />{" "}
+            <Link href="https://eproshop1.herokuapp.com/">
+              https://eproshop1.herokuapp.com/ <ExternalLinkIcon mx="2px" />{" "}
             </Link>
           </ListItem>
           <ListItem>

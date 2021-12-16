@@ -28,7 +28,7 @@ const Works = () => {
           </Section>
           <Section>
             <WorkGridItem
-              id="inkdrop"
+              id="prefabmart"
               title="PrefabMart"
               thumbnail={thumbInkdrop}
             >
@@ -38,7 +38,7 @@ const Works = () => {
           </Section>
           <Section>
             <WorkGridItem
-              id="inkdrop"
+              id="linkedhub"
               title="LinkedHub"
               thumbnail={thumbLinkedhub}
             >
@@ -48,7 +48,7 @@ const Works = () => {
           </Section>
           <Section>
             <WorkGridItem
-              id="inkdrop"
+              id="covidTracker"
               title="Covid Tracker"
               thumbnail={thumbcovid}
             >
