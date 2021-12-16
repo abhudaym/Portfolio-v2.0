@@ -22,8 +22,7 @@ const Works = () => {
               title="eProShop"
               thumbnail={thumbeproshop}
             >
-              A Markdown note-taking app with 100+ plugins, cross-platform and
-              encrypted data sync support
+              An eCommerce web-application built using MERN Stack.
             </WorkGridItem>
           </Section>
           <Section>
@@ -32,8 +31,7 @@ const Works = () => {
               title="PrefabMart"
               thumbnail={thumbInkdrop}
             >
-              A Markdown note-taking app with 100+ plugins, cross-platform and
-              encrypted data sync support
+              World's first online Prefabricated structure selling platform
             </WorkGridItem>
           </Section>
           <Section>
@@ -42,8 +40,7 @@ const Works = () => {
               title="LinkedHub"
               thumbnail={thumbLinkedhub}
             >
-              A Markdown note-taking app with 100+ plugins, cross-platform and
-              encrypted data sync support
+              A social networking site for developers created using MERN Stack.
             </WorkGridItem>
           </Section>
           <Section>
@@ -52,8 +49,8 @@ const Works = () => {
               title="Covid Tracker"
               thumbnail={thumbcovid}
             >
-              A Markdown note-taking app with 100+ plugins, cross-platform and
-              encrypted data sync support
+              Coronavirus tracker for each country and each state in India built
+              using ReactJS.
             </WorkGridItem>
           </Section>
         </SimpleGrid>
