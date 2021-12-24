@@ -74,7 +74,7 @@ const Navbar = (props) => {
           </LinkItem>
           <LinkItem
             _target="_blank"
-            href="https://drive.google.com/file/d/1gKXduJO4VesSJxlDxwQQmIXI7EXzronC/view?usp=sharing"
+            href="https://drive.google.com/file/d/1DkDdFTK4Jt94uMHfpjiUdr877HtSH1kw/view?usp=sharing"
             path={path}
             display="inline-flex"
             alignItems="center"
