@@ -102,20 +102,49 @@ export default function Home() {
             Experience
           </Heading>
           <BioSection>
+            <BioYear>01/2022 - Present</BioYear>
+            Software Engineer Intern at{" "}
+            <strong>
+              <Link href="https://rivi.co" target="_blank">
+                Rivi
+              </Link>
+            </strong>
+          </BioSection>
+          <BioSection>
             <BioYear>06/2021 - 10/2021</BioYear>
-            Software Engineer Intern at <strong>Kreator3D</strong>
+            Software Engineer Intern at{" "}
+            <strong>
+              <Link href="https://cloud.kreator3d.com/" target="_blank">
+                Kreator3D
+              </Link>
+            </strong>
           </BioSection>
           <BioSection>
             <BioYear>08/2021 - 09/2021</BioYear>
-            Freelance React Developer at <strong>Cruxe</strong>
+            Freelance React Developer at{" "}
+            <strong>
+              <Link href="https://www.cruxe.in/" target="_blank">
+                Cruxe
+              </Link>
+            </strong>
           </BioSection>
           <BioSection>
             <BioYear>11/2020-12/2020</BioYear>
-            Freelance React Developer at <strong>Quantsmantra</strong>
+            Freelance React Developer at{" "}
+            <strong>
+              <Link href="https://www.quantsmantra.com/login" target="_blank">
+                Quantsmantra
+              </Link>
+            </strong>
           </BioSection>
           <BioSection>
             <BioYear>06/2020 - 08/2020</BioYear>
-            Web Developer Intern at <strong>GoFloaters</strong>
+            Web Developer Intern at{" "}
+            <strong>
+              <Link href="https://gofloaters.com/" target="_blank">
+                GoFloaters
+              </Link>
+            </strong>
           </BioSection>
         </Section>
 
@@ -161,7 +190,10 @@ export default function Home() {
           </Heading>
           <Paragraph>
             Music, Sports - Badminton, Basketball, Table Tennis,{" "}
-            <Link href="https://www.youtube.com/channel/UCFF3KYmyKxdHYTU0B1-89DQ">
+            <Link
+              href="https://www.youtube.com/channel/UCFF3KYmyKxdHYTU0B1-89DQ"
+              target="_blank"
+            >
               Singing
             </Link>
             , Typing, Piano
