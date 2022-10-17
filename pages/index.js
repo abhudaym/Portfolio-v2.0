@@ -35,7 +35,7 @@ export default function Home() {
             <Heading as="h2" variant="page-title">
               Abhuday Mishra
             </Heading>
-            <p>Pre-Final Year Student at SRMIST</p>
+            <p>Final Year Student at SRMIST</p>
             <br />
 
             <Box
@@ -76,10 +76,9 @@ export default function Home() {
           <Paragraph>
             I&apos;m a student pursuing B.Tech from SRM Institute of Science and
             Technology, Chennai with a specialization in Computer Science. I am
-            currently a part of Aakash Research Labs and have worked with DSC
-            SRM - powered by Google Developers Club as an Associate Technical
-            Lead where I&apos;ve been responsible for building things for the
-            web with some awesome people.
+            currently working with <em>Rivi</em> and have previously worked with{" "}
+            <em>GoFloaters</em> where I&apos;ve been responsible for building
+            things for the web with some awesome people.
             <br />
             <br />
             As a web developer, I enjoy bridging the gap between engineering and
