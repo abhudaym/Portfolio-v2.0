@@ -88,72 +88,67 @@ export default function Home() {
           </Box>
         </Section>
 
-        <Section delay={0.2}>
-          <Heading as="h3" variant="section-title">
-            Experience
-          </Heading>
-          <BioSection>
-            <BioYear>01/2022 - Present</BioYear>
-            Software Engineer Intern at{" "}
-            <strong>
-              <Link href="https://rivi.co" target="_blank">
-                Rivi
-              </Link>
-            </strong>
-          </BioSection>
-          <BioSection>
-            <BioYear>06/2021 - 10/2021</BioYear>
-            Software Engineer Intern at{" "}
-            <strong>
-              <Link href="https://cloud.kreator3d.com/" target="_blank">
-                Kreator3D
-              </Link>
-            </strong>
-          </BioSection>
-          <BioSection>
-            <BioYear>08/2021 - 09/2021</BioYear>
-            Freelance React Developer at{" "}
-            <strong>
-              <Link href="https://www.cruxe.in/" target="_blank">
-                Cruxe
-              </Link>
-            </strong>
-          </BioSection>
-          <BioSection>
-            <BioYear>11/2020-12/2020</BioYear>
-            Freelance React Developer at{" "}
-            <strong>
-              <Link href="https://www.quantsmantra.com/login" target="_blank">
-                Quantsmantra
-              </Link>
-            </strong>
-          </BioSection>
-          <BioSection>
-            <BioYear>06/2020 - 08/2020</BioYear>
-            Web Developer Intern at{" "}
-            <strong>
-              <Link href="https://gofloaters.com/" target="_blank">
-                GoFloaters
-              </Link>
-            </strong>
-          </BioSection>
-        </Section>
+       <Section delay={0.2}>
+        <Heading as="h3" variant="section-title">
+          Experience
+        </Heading>
+        <BioSection>
+          <BioYear>07/2023 - Present</BioYear>
+          Software Engineer at{" "}
+          <strong>
+            <Link href="https://www.aidash.com/climate-risk-intelligence-system/" target="_blank">
+              AiDash
+            </Link>
+          </strong>
+        </BioSection>
+        <BioSection>
+          <BioYear>11/2022 - 06/2023</BioYear>
+          Software Engineer Intern at{" "}
+          <strong>
+            <Link href="https://www.aidash.com/climate-risk-intelligence-system/" target="_blank">
+              AiDash
+            </Link>
+          </strong>
+        </BioSection>
+        <BioSection>
+          <BioYear>01/2022 - 10/2022</BioYear>
+          Software Engineer Intern at{" "}
+          <strong>
+            <Link href="https://rivi.co" target="_blank">
+              Rivi
+            </Link>
+          </strong>
+        </BioSection>
+        <BioSection>
+          <BioYear>07/2021 - 11/2021</BioYear>
+          Software Engineer Intern at{" "}
+          <strong>
+            <Link href="https://cloud.kreator3d.com/" target="_blank">
+              Kreator3D
+            </Link>
+          </strong>
+        </BioSection>
+      </Section>
 
         <Section delay={0.3}>
           <Heading as="h3" variant="section-title">
             Skills
           </Heading>
           <SimpleGrid columns={2} spacingX={10} spacingY={2}>
-            <p>JavaScript/TypeScript</p>
+            <p>Java</p>
             <p>Python</p>
             <p>C/C++</p>
-            <p>React</p>
+            <p>JavaScript/TypeScript</p>
+            <p>ReactJS</p>
             <p>NextJS</p>
-            <p>React Native</p>
+            <p>Spring Boot</p>
             <p>NodeJS/Express</p>
-            <p>HTML</p>
-            <p>CSS/SASS</p>
             <p>MongoDB</p>
+            <p>PostgreSQL</p>
+            <p>AWS</p>
+            <p>RabbitMQ</p>
+            <p>HTML/CSS</p>
+            <p>Git</p>
           </SimpleGrid>
         </Section>
 
