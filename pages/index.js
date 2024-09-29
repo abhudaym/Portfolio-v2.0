@@ -35,7 +35,7 @@ export default function Home() {
             <Heading as="h2" variant="page-title">
               Abhuday Mishra
             </Heading>
-            <p>Final Year Student at SRMIST</p>
+            <p>SDE-1 at Aidash</p>
             <br />
 
             <Box
@@ -74,18 +74,10 @@ export default function Home() {
             Work
           </Heading>
           <Paragraph>
-            I&apos;m a student pursuing B.Tech from SRM Institute of Science and
-            Technology, Chennai with a specialization in Computer Science. I am
-            currently working with <em>Rivi</em> and have previously worked with{" "}
-            <em>GoFloaters</em> where I&apos;ve been responsible for building
-            things for the web with some awesome people.
+            Abhuday Mishra (yes, he’s referring to himself in the third person, and yes, he knows it’s weird) is a software engineer at AiDash, where he spends his days wrangling Java and Spring Boot to build tech that fights climate change. His pride and joy? The Climate Risk Intelligence System (CRIS), a powerhouse of satellite imagery, real-time weather data, and vegetation insights that predict outages before storms and wildfires even think about making landfall.
             <br />
             <br />
-            As a web developer, I enjoy bridging the gap between engineering and
-            design — combining my technical knowledge with my keen eye for
-            design to create a beautiful product. My goal is to always build
-            applications that are scalable and efficient under the hood while
-            providing engaging, pixel-perfect user experiences.
+            When he’s not busy saving the world (or at least trying to), Abhuday can be found either chasing a shuttlecock on the badminton court or shooting some hoops. And if he’s not on the court, he’s likely plucking away on his guitar, playing piano, or just singing his heart out for no reason at all. Whether it’s sports or music, it’s his way of staying sane—because, let’s be real, talking about yourself in third person can only take you so far.
           </Paragraph>
           <Box align="center" my={4}>
             <NextLink href="/works">
