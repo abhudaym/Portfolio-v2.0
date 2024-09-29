@@ -9,7 +9,8 @@ const Footer = () => {
         Abhuday Mishra
       </Link>{" "}
       &copy; {new Date().getFullYear()} <br />
-      Built using <Link href="https://nextjs.org/">NextJS</Link>
+      Built using <Link href="https://nextjs.org/">NextJS</Link> <br />
+      Inspired by <Link href="https://craftz.dog/">CraftzDog</Link>
     </Box>
   );
 };
