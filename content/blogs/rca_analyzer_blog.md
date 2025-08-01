@@ -54,7 +54,6 @@ async def analyze_error(error_signature):
 **Result:** 85% reduction in data fetching time, 75% faster root cause identification.
 
 ## AI Agents: Making Sense of Aggregated Logs
-
 Once MCP consolidates logs from multiple sources, specialized AI agents transform raw data into actionable insights:
 
 🤖 **Error Clustering Agent** - Groups similar errors using semantic similarity, reducing noise and identifying core patterns  
@@ -77,9 +76,8 @@ async def process_aggregated_logs(unified_logs):
 ```
 
 ## Technical Stack & Implementation
-
 **Core Architecture:**
-- **Frontend**: React dashboard with error timeline and actionable recommendations
+- **Frontend**: React dashboard with conversational interface and error timeline
 - **Backend**: FastAPI with async processing for real-time analysis
 - **Integration**: MCP server supporting multiple log sources
 - **AI**: Custom pattern recognition with LLM-powered insights
@@ -103,26 +101,27 @@ class MCPLogServer:
 ```
 
 ## Impact & Results
-
-**Quantifiable Wins:**
-- **75% reduction** in time to identify root causes
-- **50% improvement** in first-time fix rate
-- **4+ log sources** unified through single MCP interface
-- **90% accuracy** in AI source selection
+**Real-World Improvements:**
+- **Conversational Interface**: Engineers can describe issues in plain English: "Getting null pointer exceptions since 2 AM"
+- **Intelligent Analysis**: AI automatically determines which log sources to check based on error description
+- **Unified Dashboard**: Eliminates jumping between multiple systems - everything happens in one interface
+- **Non-Technical Accessibility**: Stakeholders can understand system outages without decoding technical logs
+- **Automated Source Selection**: Smart selection of relevant sources instead of querying everything
 
 **Developer Experience:**
-- **Before**: Manual correlation across multiple systems, hours of debugging
-- **After**: Single dashboard with AI-generated insights in minutes
+- **Before**: Manual correlation across multiple systems, hours of detective work
+- **After**: Natural language input with AI-generated insights and suggested fixes in minutes
 
 **Recognition:** 🏆 **2nd Place** at AiDASH Hack(AI)thon
 
 ## Why This Approach Works
-
 **Scalability:** Adding new log sources requires only writing an MCP adapter - no changes to AI or frontend code.
 
-**Intelligence:** AI agents learn from historical patterns and get smarter over time.
+**Intelligence:** AI agents learn from patterns and provide increasingly relevant source selection.
 
 **Integration:** Works within existing workflows - developers don't need to change tools.
+
+**Accessibility:** Non-technical stakeholders can understand system issues through plain English summaries.
 
 ## Key Takeaways
 
