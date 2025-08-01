@@ -10,6 +10,7 @@ import {
   List,
   ListItem,
   Icon,
+  Text,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
@@ -24,6 +25,15 @@ import {
   IoLogoGithub,
   IoLogoLinkedin,
   IoLogoTwitter,
+  IoMusicalNotes,
+  IoGuitar,
+  IoPiano,
+  IoMic,
+  IoBook,
+  IoBasketball,
+  IoCode,
+  IoBrush,
+  IoLaptop,
 } from "react-icons/io5";
 
 export default function Home() {
@@ -64,7 +74,7 @@ export default function Home() {
               maxWidth="100px"
               display="inline-block"
               borderRadius="full"
-              src="/images/abhuday.jpg"
+              src="/images/newdp.jpeg"
               alt="Profile Image"
             />
           </Box>
@@ -77,7 +87,7 @@ export default function Home() {
             Abhuday Mishra (yes, he's referring to himself in the third person, and yes, he knows it's weird) is a software engineer at AiDash, where he spends his days wrangling Java and Spring Boot to build tech that fights climate change. His pride and joy? The Climate Risk Intelligence System (CRIS), a powerhouse of satellite imagery, real-time weather data, and vegetation insights that predict outages before storms and wildfires even think about making landfall.
             <br />
             <br />
-            When he's not busy saving the world (or at least trying to), Abhuday can be found either chasing a shuttlecock on the badminton court or shooting some hoops. And if he's not on the court, he's likely plucking away on his guitar, playing piano, or just singing his heart out for no reason at all. Whether it's sports or music, it's his way of staying sane—because, let's be real, talking about yourself in third person can only take you so far.
+            When he's not busy saving the world (or at least trying to), Abhuday can be found either chasing a shuttlecock on the badminton court or shooting some hoops. And if he's not on the court, he's likely plucking away on his guitar, playing piano, or just singing his heart out for no reason at all. Whether it's sports or music, it's his way of staying sane - because, let's be real, talking about yourself in third person can only take you so far.
             <br />
             <br />
             He also writes about technology, software engineering, and his experiences in the industry. From deep dives into frameworks and tools to insights about building scalable systems, his blog posts cover various aspects of modern software development.
@@ -193,13 +203,89 @@ export default function Home() {
           <Heading as="h3" variant="section-title">
             I ❤
           </Heading>
-          <Paragraph>
-            Art, Music,{" "}
-            <Link href="https://www.spotify.com" target="_blank">
-              Playing Guitar
-            </Link>
-            , Playing Piano, Singing, Reading, Playing Badminton, Playing Basketball, and, of course, coding.
-          </Paragraph>
+          <SimpleGrid columns={[1, 2, 3]} spacing={4} mt={4}>
+            <Box
+              p={4}
+              borderRadius="lg"
+              border="1px"
+              borderColor="gray.200"
+              _dark={{ borderColor: "gray.700" }}
+              textAlign="center"
+              transition="all 0.2s"
+              _hover={{ transform: "translateY(-2px)", shadow: "md" }}
+            >
+              <Icon as={IoMusicalNotes} boxSize={6} color="purple.500" mb={2} />
+              <Text fontWeight="semibold">Music</Text>
+            </Box>
+            <Box
+              p={4}
+              borderRadius="lg"
+              border="1px"
+              borderColor="gray.200"
+              _dark={{ borderColor: "gray.700" }}
+              textAlign="center"
+              transition="all 0.2s"
+              _hover={{ transform: "translateY(-2px)", shadow: "md" }}
+            >
+              <Icon as={IoMic} boxSize={6} color="pink.500" mb={2} />
+              <Text fontWeight="semibold">Singing</Text>
+            </Box>
+            <Box
+              p={4}
+              borderRadius="lg"
+              border="1px"
+              borderColor="gray.200"
+              _dark={{ borderColor: "gray.700" }}
+              textAlign="center"
+              transition="all 0.2s"
+              _hover={{ transform: "translateY(-2px)", shadow: "md" }}
+            >
+              <Icon as={IoBasketball} boxSize={6} color="red.500" mb={2} />
+              <Text fontWeight="semibold">Badminton</Text>
+            </Box>
+            <Box
+              p={4}
+              borderRadius="lg"
+              border="1px"
+              borderColor="gray.200"
+              _dark={{ borderColor: "gray.700" }}
+              textAlign="center"
+              transition="all 0.2s"
+              _hover={{ transform: "translateY(-2px)", shadow: "md" }}
+            >
+              <Icon as={IoBasketball} boxSize={6} color="orange.500" mb={2} />
+              <Text fontWeight="semibold">Basketball</Text>
+            </Box>
+            <Box
+              p={4}
+              borderRadius="lg"
+              border="1px"
+              borderColor="gray.200"
+              _dark={{ borderColor: "gray.700" }}
+              textAlign="center"
+              transition="all 0.2s"
+              _hover={{ transform: "translateY(-2px)", shadow: "md" }}
+            >
+              <Icon as={IoCode} boxSize={6} color="teal.500" mb={2} />
+              <Text fontWeight="semibold">Coding</Text>
+            </Box>
+            <Box
+              p={4}
+              borderRadius="lg"
+              border="1px"
+              borderColor="gray.200"
+              _dark={{ borderColor: "gray.700" }}
+              textAlign="center"
+              transition="all 0.2s"
+              _hover={{ transform: "translateY(-2px)", shadow: "md" }}
+            >
+              <Icon as={IoLaptop} boxSize={6} color="blue.500" mb={2} />
+              <Text fontWeight="semibold">Speed Typing</Text>
+              <Text fontSize="sm" color="gray.500" mt={1}>
+                Best: 130 WPM
+              </Text>
+            </Box>
+          </SimpleGrid>
         </Section>
         <Section delay={0.6}>
           <Heading as="h3" variant="section-title">
