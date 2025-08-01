@@ -194,7 +194,7 @@ export default function Home() {
             Web Developer at <strong>Webarch Club</strong>
           </BioSection>
           <BioSection>
-            <BioYear>08/2019 - Present</BioYear>
+            <BioYear>08/2019 - 03/2022</BioYear>
             Web Developer at <strong>Aakash Research Labs</strong>
           </BioSection>
         </Section>
