@@ -84,10 +84,10 @@ export default function Home() {
             Work
           </Heading>
           <Paragraph>
-            Abhuday Mishra (yes, he's referring to himself in the third person, and yes, he knows it's weird) is a software engineer at AiDash, where he spends his days wrangling Java and Spring Boot to build tech that fights climate change. His pride and joy? The Climate Risk Intelligence System (CRIS), a powerhouse of satellite imagery, real-time weather data, and vegetation insights that predict outages before storms and wildfires even think about making landfall.
+            Abhuday Mishra (yes, he&apos;s referring to himself in the third person, and yes, he knows it&apos;s weird) is a software engineer at AiDash, where he spends his days wrangling Java and Spring Boot to build tech that fights climate change. His pride and joy? The Climate Risk Intelligence System (CRIS), a powerhouse of satellite imagery, real-time weather data, and vegetation insights that predict outages before storms and wildfires even think about making landfall.
             <br />
             <br />
-            When he's not busy saving the world (or at least trying to), Abhuday can be found either chasing a shuttlecock on the badminton court or shooting some hoops. And if he's not on the court, he's likely plucking away on his guitar, playing piano, or just singing his heart out for no reason at all. Whether it's sports or music, it's his way of staying sane - because, let's be real, talking about yourself in third person can only take you so far.
+            When he&apos;s not busy saving the world (or at least trying to), Abhuday can be found either chasing a shuttlecock on the badminton court or shooting some hoops. And if he&apos;s not on the court, he&apos;s likely plucking away on his guitar, playing piano, or just singing his heart out for no reason at all. Whether it&apos;s sports or music, it&apos;s his way of staying sane - because, let&apos;s be real, talking about yourself in third person can only take you so far.
             <br />
             <br />
             He also writes about technology, software engineering, and his experiences in the industry. From deep dives into frameworks and tools to insights about building scalable systems, his blog posts cover various aspects of modern software development.
