@@ -22,17 +22,17 @@ const LinkItem = ({ href, path, children, _target, ...props }) => {
   const active = path === href;
   const inactiveColor = useColorModeValue("gray200", "whiteAlpha.900");
   return (
-    <NextLink href={href} passHref>
-      <Link
-        p={2}
-        bg={active ? "glassTeal" : undefined}
-        color={active ? "#202023" : inactiveColor}
-        _target={_target}
-        {...props}
-      >
-        {children}
-      </Link>
-    </NextLink>
+    <Link
+      as={NextLink}
+      href={href}
+      p={2}
+      bg={active ? "glassTeal" : undefined}
+      color={active ? "#202023" : inactiveColor}
+      _target={_target}
+      {...props}
+    >
+      {children}
+    </Link>
   );
 };
 
@@ -72,9 +72,12 @@ const Navbar = (props) => {
           <LinkItem href="/works" path={path}>
             Works
           </LinkItem>
+          <LinkItem href="/blogs" path={path}>
+            Blogs
+          </LinkItem>
           <LinkItem
             _target="_blank"
-            href="https://drive.google.com/file/d/1Ajz1nao8D5Tx3863nkfc6QH2z9Y-bKvW/view?usp=sharing"
+            href="https://drive.google.com/file/d/1tZHxfCKrKgjexg7VGR5PoskD18HmSTaF/view?usp=sharing"
             path={path}
             display="inline-flex"
             alignItems="center"
@@ -96,11 +99,14 @@ const Navbar = (props) => {
                 aria-label="Options"
               />
               <MenuList>
-                <NextLink href="/" passHref>
-                  <MenuItem as={Link}>About</MenuItem>
+                <NextLink href="/">
+                  <MenuItem>About</MenuItem>
                 </NextLink>
-                <NextLink href="/works" passHref>
-                  <MenuItem as={Link}>Works</MenuItem>
+                <NextLink href="/works">
+                  <MenuItem>Works</MenuItem>
+                </NextLink>
+                <NextLink href="/blogs">
+                  <MenuItem>Blogs</MenuItem>
                 </NextLink>
                 <MenuItem
                   as={Link}

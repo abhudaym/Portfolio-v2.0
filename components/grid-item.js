@@ -11,8 +11,9 @@ export const GridItem = ({ children, href, title, thumbnail }) => {
           src={thumbnail}
           alt={title}
           className="grid-item-thumbnail"
-          placeholder="blur"
           loading="lazy"
+          width={400}
+          height={200}
         />
         <LinkOverlay href={href} target="_blank">
           <Text mt={2}>{title}</Text>
@@ -26,22 +27,43 @@ export const GridItem = ({ children, href, title, thumbnail }) => {
 export const WorkGridItem = ({ children, id, title, thumbnail }) => {
   return (
     <Box w="100%" align="center">
-      <NextLink href={`/works/${id}`}>
-        <LinkBox cursor="pointer">
-          <Image
-            src={thumbnail}
-            alt={title}
-            className="grid-item-thumbnail"
-            placeholder="blur"
-          />
-          <LinkOverlay href={`/works/${id}`}>
-            <Text mt={2} fontSize={20}>
-              {title}
-            </Text>
-          </LinkOverlay>
-          <Text fontSize={14}>{children}</Text>
-        </LinkBox>
-      </NextLink>
+      <LinkBox cursor="pointer" as={NextLink} href={`/works/${id}`}>
+        <Image
+          src={thumbnail}
+          alt={title}
+          className="grid-item-thumbnail"
+          width={400}
+          height={200}
+        />
+        <LinkOverlay href={`/works/${id}`}>
+          <Text mt={2} fontSize={20}>
+            {title}
+          </Text>
+        </LinkOverlay>
+        <Text fontSize={14}>{children}</Text>
+      </LinkBox>
+    </Box>
+  );
+};
+
+export const BlogGridItem = ({ children, id, title, thumbnail }) => {
+  return (
+    <Box w="100%" align="center">
+      <LinkBox cursor="pointer" as={NextLink} href={`/blogs/${id}`}>
+        <Image
+          src={thumbnail}
+          alt={title}
+          className="grid-item-thumbnail"
+          width={400}
+          height={200}
+        />
+        <LinkOverlay href={`/blogs/${id}`}>
+          <Text mt={2} fontSize={20}>
+            {title}
+          </Text>
+        </LinkOverlay>
+        <Text fontSize={14}>{children}</Text>
+      </LinkBox>
     </Box>
   );
 };
