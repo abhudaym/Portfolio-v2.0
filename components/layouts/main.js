@@ -5,7 +5,12 @@ import Footer from "../footer";
 
 const Main = ({ children, router }) => {
   return (
-    <Box as="main" pb={8}>
+    <Box 
+      as="main" 
+      minH="100vh" 
+      display="flex" 
+      flexDirection="column"
+    >
       <Head>
         <meta
           name="viewport"
@@ -16,8 +21,17 @@ const Main = ({ children, router }) => {
 
       <Navbar path={router.asPath} />
 
-      <Container maxW="container.md" pt={14}>
-        {children}
+      <Container 
+        maxW="container.md" 
+        pt={14} 
+        pb={8}
+        flex="1"
+        display="flex"
+        flexDirection="column"
+      >
+        <Box flex="1">
+          {children}
+        </Box>
         <Footer />
       </Container>
     </Box>

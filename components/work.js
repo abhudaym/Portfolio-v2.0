@@ -1,12 +1,31 @@
 import NextLink from "next/link";
 import { Heading, Box, Image, Link, Badge } from "@chakra-ui/react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
+
 export const Title = ({ children }) => {
   return (
     <Box>
-      <NextLink href="/works">
-        <Link>Works</Link>
-      </NextLink>
+      <Link as={NextLink} href="/works">
+        Works
+      </Link>
+      <span>
+        &nbsp;
+        <ChevronRightIcon />
+        &nbsp;
+      </span>
+      <Heading display="inline-block" as="h3" fontSize={20} mb={4}>
+        {children}
+      </Heading>
+    </Box>
+  );
+};
+
+export const BlogTitle = ({ children }) => {
+  return (
+    <Box>
+      <Link as={NextLink} href="/blogs">
+        Blogs
+      </Link>
       <span>
         &nbsp;
         <ChevronRightIcon />
