@@ -27,9 +27,8 @@ I built **PlaylistGenie** in a weekend—an AI-powered Spotify wrapper that tran
 **The magic:** It feels like telling a friend what you're in the mood for and getting the perfect playlist instantly.
 
 ### Live Demo
-*[Insert screenshot of PlaylistGenie UI showing prompt input and generated playlist]*
-
 ![PlaylistGenie Screenshot](/images/works/pg_1.png)
+![PlaylistGenie Screenshot](/images/works/pg_3.png)
 
 ## How It Works
 
