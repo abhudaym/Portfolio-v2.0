@@ -27,7 +27,7 @@ export const GridItem = ({ children, href, title, thumbnail }) => {
 export const WorkGridItem = ({ children, id, title, thumbnail }) => {
   return (
     <Box w="100%" align="center">
-      <LinkBox cursor="pointer" as={NextLink} href={`/works/${id}`}>
+      <LinkBox cursor="pointer">
         <Image
           src={thumbnail}
           alt={title}
@@ -35,7 +35,7 @@ export const WorkGridItem = ({ children, id, title, thumbnail }) => {
           width={400}
           height={200}
         />
-        <LinkOverlay href={`/works/${id}`}>
+        <LinkOverlay as={NextLink} href={`/works/${id}`}>
           <Text mt={2} fontSize={20}>
             {title}
           </Text>
@@ -49,7 +49,7 @@ export const WorkGridItem = ({ children, id, title, thumbnail }) => {
 export const BlogGridItem = ({ children, id, title, thumbnail }) => {
   return (
     <Box w="100%" align="center">
-      <LinkBox cursor="pointer" as={NextLink} href={`/blogs/${id}`}>
+      <LinkBox cursor="pointer">
         <Image
           src={thumbnail}
           alt={title}
@@ -57,7 +57,7 @@ export const BlogGridItem = ({ children, id, title, thumbnail }) => {
           width={400}
           height={200}
         />
-        <LinkOverlay href={`/blogs/${id}`}>
+        <LinkOverlay as={NextLink} href={`/blogs/${id}`}>
           <Text mt={2} fontSize={20}>
             {title}
           </Text>
