@@ -13,5 +13,14 @@ export const profile = {
       title: 'About Me',
       type: 'markdown',
     },
+    {
+      name: 'resume',
+      title: 'Resume PDF',
+      type: 'file',
+      options: {
+        accept: '.pdf',
+      },
+      description: 'Upload your latest resume PDF here',
+    },
   ],
 }
