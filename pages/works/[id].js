@@ -90,6 +90,12 @@ const WorkMarkdownPage = ({ frontMatter, content }) => {
               <span>{frontMatter.stack}</span>
             </ListItem>
           )}
+          {frontMatter.date && (
+            <ListItem>
+              <Meta>Date</Meta>
+              <span>{formatDate(frontMatter.date)}</span>
+            </ListItem>
+          )}
           {frontMatter.source && (
             <ListItem>
               <Meta>Source</Meta>

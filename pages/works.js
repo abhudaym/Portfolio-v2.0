@@ -1,4 +1,4 @@
-import { Heading, SimpleGrid } from "@chakra-ui/react";
+import { Heading, SimpleGrid, Text, Box } from "@chakra-ui/react";
 import Section from "../components/section";
 import { WorkGridItem, GridItemStyle } from "../components/grid-item";
 import thumbInkdrop from "../public/images/works/prefab_01.jpg";
@@ -19,6 +19,16 @@ export async function getStaticProps() {
 }
 
 const Works = ({ mdWorks }) => {
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
   return (
     <Layout>
       <Heading as="h3" fontSize={20} mb={4} mt={0}>
@@ -30,7 +40,14 @@ const Works = ({ mdWorks }) => {
           mdWorks.map((item) => (
             <Section key={item.id}>
               <WorkGridItem id={item.id} title={item.title} thumbnail={item.thumbnail}>
-                {item.description}
+                <Box>
+                  <Text fontSize={14}>{item.description}</Text>
+                  {item.date && (
+                    <Text fontSize={12} color="gray.500" fontStyle="italic" mt={1}>
+                      {formatDate(item.date)}
+                    </Text>
+                  )}
+                </Box>
               </WorkGridItem>
             </Section>
           ))}
