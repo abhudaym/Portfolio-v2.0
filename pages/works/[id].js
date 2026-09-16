@@ -1,46 +1,53 @@
-import fs from 'fs';
-import path from 'path';
-import { Container, Text, Image, Box, Link } from "@chakra-ui/react";
+import {
+  Container,
+  Text,
+  Image,
+  Box,
+  Link,
+  Badge,
+  List,
+  ListItem,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer
+} from "@chakra-ui/react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import Layout from "../../components/layouts/article";
-import { Title } from "../../components/work";
+import { Title, Meta } from "../../components/work";
 import NextLink from "next/link";
 import ReactMarkdown from 'react-markdown';
-import matter from 'gray-matter';
 import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
+import { getPublishedWorks, getWorkBySlug } from '../../lib/sanity';
 
 export async function getStaticPaths() {
-  const worksDirectory = path.join(process.cwd(), 'content/works');
+  const works = await getPublishedWorks();
+  
+  const paths = works.map((work) => ({
+    params: { id: work.id.toString() },
+  }));
 
-  if (!fs.existsSync(worksDirectory)) {
-    return { paths: [], fallback: false };
-  }
-
-  const filenames = fs.readdirSync(worksDirectory);
-
-  const paths = filenames
-    .filter((filename) => filename.endsWith('.md'))
-    .map((filename) => ({ params: { id: filename.replace('.md', '') } }));
-
-  return { paths, fallback: false };
+  return { paths, fallback: 'blocking' };
 }
 
 export async function getStaticProps({ params }) {
-  const filePath = path.join(process.cwd(), 'content/works', `${params.id}.md`);
+  const workData = await getWorkBySlug(params.id);
 
-  if (!fs.existsSync(filePath)) {
+  if (!workData) {
     return { notFound: true };
   }
 
-  const fileContents = fs.readFileSync(filePath, 'utf8');
-  const { data: frontMatter, content } = matter(fileContents);
-
   return {
     props: {
-      frontMatter,
-      content,
+      frontMatter: workData.frontMatter,
+      content: workData.content,
       id: params.id,
     },
+    revalidate: 10,
   };
 }
 
@@ -59,12 +66,39 @@ const WorkMarkdownPage = ({ frontMatter, content }) => {
     <Layout title={frontMatter.title || 'Work'}>
       <Container>
         <Title>{frontMatter.title}</Title>
-
-        {frontMatter.description && (
-          <Text fontSize="lg" mb={4}>
-            {frontMatter.description}
-          </Text>
-        )}
+        <p>
+          {frontMatter.description}
+        </p>
+        <List ml={4} my={4}>
+          {frontMatter.website && (
+            <ListItem>
+              <Meta>Website</Meta>
+              <Link href={frontMatter.website} isExternal>
+                {frontMatter.website}
+              </Link>
+            </ListItem>
+          )}
+          {frontMatter.platform && (
+            <ListItem>
+              <Meta>Platform</Meta>
+              <span>{frontMatter.platform}</span>
+            </ListItem>
+          )}
+          {frontMatter.stack && (
+            <ListItem>
+              <Meta>Stack</Meta>
+              <span>{frontMatter.stack}</span>
+            </ListItem>
+          )}
+          {frontMatter.source && (
+            <ListItem>
+              <Meta>Source</Meta>
+              <Link href={frontMatter.source} isExternal>
+                {frontMatter.source}
+              </Link>
+            </ListItem>
+          )}
+        </List>
 
         {frontMatter.date && (
           <Text fontSize="sm" color="gray.500" mb={4} fontStyle="italic">
@@ -75,13 +109,11 @@ const WorkMarkdownPage = ({ frontMatter, content }) => {
         {frontMatter.image && (
           <Box my={6}>
             <Image
-              src={frontMatter.image}
+              src={frontMatter.image || frontMatter.thumbnail}
               alt={frontMatter.title}
               borderRadius="lg"
               w="full"
               mb={4}
-              width={800}
-              height={400}
             />
           </Box>
         )}
@@ -89,6 +121,7 @@ const WorkMarkdownPage = ({ frontMatter, content }) => {
         <Box className="markdown-content">
           <ReactMarkdown
             rehypePlugins={[rehypeRaw]}
+            remarkPlugins={[remarkGfm]}
             components={{
               video: ({ node, ...props }) => (
                 <video
@@ -125,6 +158,18 @@ const WorkMarkdownPage = ({ frontMatter, content }) => {
                   }}
                 />
               ),
+              table: ({ children }) => (
+                <TableContainer my={4} border="1px" borderColor="gray.200" borderRadius="md" _dark={{ borderColor: "gray.700" }}>
+                  <Table variant="simple" size="sm">
+                    {children}
+                  </Table>
+                </TableContainer>
+              ),
+              thead: ({ children }) => <Thead>{children}</Thead>,
+              tbody: ({ children }) => <Tbody>{children}</Tbody>,
+              tr: ({ children }) => <Tr>{children}</Tr>,
+              th: ({ children }) => <Th>{children}</Th>,
+              td: ({ children }) => <Td>{children}</Td>,
             }}
           >
             {content}

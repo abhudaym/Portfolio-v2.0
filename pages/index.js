@@ -19,6 +19,10 @@ import Paragraph from "../components/paragraph";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import Layout from "../components/layouts/article";
 import NextLink from "next/link";
+import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
+import { getProfile, getExperiences, getSkills } from "../lib/sanity";
 import { BioSection, BioYear } from "../components/bio";
 import {
   IoLogoInstagram,
@@ -36,7 +40,7 @@ import {
   IoLaptop,
 } from "react-icons/io5";
 
-export default function Home() {
+export default function Home({ profile, experiences, skills }) {
   return (
     <Layout>
       <Container>
@@ -83,15 +87,25 @@ export default function Home() {
           <Heading as="h3" variant={"section-title"}>
             Work
           </Heading>
-          <Paragraph>
-            Abhuday Mishra (yes, he&apos;s referring to himself in the third person, and yes, he knows it&apos;s weird) is a software engineer at AiDash, where he spends his days wrangling Java and Spring Boot to build tech that fights climate change. His pride and joy? The Climate Risk Intelligence System (CRIS), a powerhouse of satellite imagery, real-time weather data, and vegetation insights that predict outages before storms and wildfires even think about making landfall.
-            <br />
-            <br />
-            When he&apos;s not busy saving the world (or at least trying to), Abhuday can be found either chasing a shuttlecock on the badminton court or shooting some hoops. And if he&apos;s not on the court, he&apos;s likely plucking away on his guitar, playing piano, or just singing his heart out for no reason at all. Whether it&apos;s sports or music, it&apos;s his way of staying sane - because, let&apos;s be real, talking about yourself in third person can only take you so far.
-            <br />
-            <br />
-            He also writes about technology, software engineering, and his experiences in the industry. From deep dives into frameworks and tools to insights about building scalable systems, his blog posts cover various aspects of modern software development.
-          </Paragraph>
+          {profile?.about ? (
+            <Markdown 
+              rehypePlugins={[rehypeRaw]}
+              remarkPlugins={[remarkGfm]}
+              components={{ p: ({ children }) => <Paragraph>{children}</Paragraph> }}
+            >
+              {profile.about}
+            </Markdown>
+          ) : (
+            <Paragraph>
+              Abhuday Mishra (yes, he&apos;s referring to himself in the third person, and yes, he knows it&apos;s weird) is a software engineer at AiDash, where he spends his days wrangling Java and Spring Boot to build tech that fights climate change. His pride and joy? The Climate Risk Intelligence System (CRIS), a powerhouse of satellite imagery, real-time weather data, and vegetation insights that predict outages before storms and wildfires even think about making landfall.
+              <br />
+              <br />
+              When he&apos;s not busy saving the world (or at least trying to), Abhuday can be found either chasing a shuttlecock on the badminton court or shooting some hoops. And if he&apos;s not on the court, he&apos;s likely plucking away on his guitar, playing piano, or just singing his heart out for no reason at all. Whether it&apos;s sports or music, it&apos;s his way of staying sane - because, let&apos;s be real, talking about yourself in third person can only take you so far.
+              <br />
+              <br />
+              He also writes about technology, software engineering, and his experiences in the industry. From deep dives into frameworks and tools to insights about building scalable systems, his blog posts cover various aspects of modern software development.
+            </Paragraph>
+          )}
           <Box align="center" my={4}>
             <Box display="flex" gap={4} flexWrap="wrap" justifyContent="center">
               <Link as={NextLink} href="/works">
@@ -108,76 +122,104 @@ export default function Home() {
           </Box>
         </Section>
 
-       <Section delay={0.2}>
-        <Heading as="h3" variant="section-title">
-          Experience
-        </Heading>
-        <BioSection>
-          <BioYear>04/2025 - Present</BioYear>
-          Software Engineer 2 at{" "}
-          <strong>
-            <Link href="https://www.aidash.com/climate-risk-intelligence-system/" target="_blank">
-              AiDash
-            </Link>
-          </strong>
-        </BioSection>
-        <BioSection>
-          <BioYear>07/2023 - 03/2025</BioYear>
-          Software Engineer 1 at{" "}
-          <strong>
-            <Link href="https://www.aidash.com/climate-risk-intelligence-system/" target="_blank">
-              AiDash
-            </Link>
-          </strong>
-        </BioSection>
-        <BioSection>
-          <BioYear>11/2022 - 06/2023</BioYear>
-          Software Engineer Intern at{" "}
-          <strong>
-            <Link href="https://www.aidash.com/climate-risk-intelligence-system/" target="_blank">
-              AiDash
-            </Link>
-          </strong>
-        </BioSection>
-        <BioSection>
-          <BioYear>01/2022 - 10/2022</BioYear>
-          Software Engineer Intern at{" "}
-          <strong>
-            <Link href="https://rivi.co" target="_blank">
-              Rivi
-            </Link>
-          </strong>
-        </BioSection>
-        <BioSection>
-          <BioYear>07/2021 - 11/2021</BioYear>
-          Software Engineer Intern at{" "}
-          <strong>
-            <Link href="https://cloud.kreator3d.com/" target="_blank">
-              Kreator3D
-            </Link>
-          </strong>
-        </BioSection>
-      </Section>
+        <Section delay={0.2}>
+         <Heading as="h3" variant="section-title">
+           Experience
+         </Heading>
+         {experiences && experiences.length > 0 ? (
+           experiences.map((exp) => (
+             <BioSection key={exp._id}>
+               <BioYear>{exp.period}</BioYear>
+               {exp.role} at{" "}
+               <strong>
+                 {exp.companyUrl ? (
+                   <Link href={exp.companyUrl} target="_blank">
+                     {exp.company}
+                   </Link>
+                 ) : (
+                   exp.company
+                 )}
+               </strong>
+             </BioSection>
+           ))
+         ) : (
+           <>
+             <BioSection>
+               <BioYear>04/2025 - Present</BioYear>
+               Software Engineer 2 at{" "}
+               <strong>
+                 <Link href="https://www.aidash.com/climate-risk-intelligence-system/" target="_blank">
+                   AiDash
+                 </Link>
+               </strong>
+             </BioSection>
+             <BioSection>
+               <BioYear>07/2023 - 03/2025</BioYear>
+               Software Engineer 1 at{" "}
+               <strong>
+                 <Link href="https://www.aidash.com/climate-risk-intelligence-system/" target="_blank">
+                   AiDash
+                 </Link>
+               </strong>
+             </BioSection>
+             <BioSection>
+               <BioYear>11/2022 - 06/2023</BioYear>
+               Software Engineer Intern at{" "}
+               <strong>
+                 <Link href="https://www.aidash.com/climate-risk-intelligence-system/" target="_blank">
+                   AiDash
+                 </Link>
+               </strong>
+             </BioSection>
+             <BioSection>
+               <BioYear>01/2022 - 10/2022</BioYear>
+               Software Engineer Intern at{" "}
+               <strong>
+                 <Link href="https://rivi.co" target="_blank">
+                   Rivi
+                 </Link>
+               </strong>
+             </BioSection>
+             <BioSection>
+               <BioYear>07/2021 - 11/2021</BioYear>
+               Software Engineer Intern at{" "}
+               <strong>
+                 <Link href="https://cloud.kreator3d.com/" target="_blank">
+                   Kreator3D
+                 </Link>
+               </strong>
+             </BioSection>
+           </>
+         )}
+       </Section>
 
         <Section delay={0.3}>
           <Heading as="h3" variant="section-title">
             Skills
           </Heading>
           <SimpleGrid columns={2} spacingX={10} spacingY={2}>
-            <p>Java</p>
-            <p>Python</p>
-            <p>C/C++</p>
-            <p>JavaScript/TypeScript</p>
-            <p>ReactJS</p>
-            <p>NextJS</p>
-            <p>Spring Boot</p>
-            <p>NodeJS/Express</p>
-            <p>MongoDB</p>
-            <p>PostgreSQL</p>
-            <p>AWS</p>
-            <p>RabbitMQ</p>
-            <p>HTML/CSS</p>
-            <p>Git</p>
+            {skills && skills.length > 0 ? (
+              skills.map((skill) => (
+                <p key={skill._id}>{skill.name}</p>
+              ))
+            ) : (
+              <>
+                <p>Java</p>
+                <p>Python</p>
+                <p>C/C++</p>
+                <p>JavaScript/TypeScript</p>
+                <p>ReactJS</p>
+                <p>NextJS</p>
+                <p>Spring Boot</p>
+                <p>NodeJS/Express</p>
+                <p>MongoDB</p>
+                <p>PostgreSQL</p>
+                <p>AWS</p>
+                <p>RabbitMQ</p>
+                <p>HTML/CSS</p>
+                <p>Git</p>
+              </>
+            )}
           </SimpleGrid>
         </Section>
 
@@ -352,4 +394,19 @@ export default function Home() {
       </Container>
     </Layout>
   );
+}
+
+export async function getStaticProps() {
+  const profile = await getProfile();
+  const experiences = await getExperiences();
+  const skills = await getSkills();
+
+  return {
+    props: {
+      profile: profile || null,
+      experiences: experiences || [],
+      skills: skills || [],
+    },
+    revalidate: 60,
+  };
 }

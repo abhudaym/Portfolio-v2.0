@@ -6,39 +6,15 @@ import thumbeproshop from "../public/images/works/eproshop_01.jpg";
 import thumbLinkedhub from "../public/images/works/linkedhub_01.jpg";
 import thumbcovid from "../public/images/works/covidTracker_01.jpg";
 import Layout from "../components/layouts/article";
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
+
+import { getPublishedWorks } from "../lib/sanity";
 
 export async function getStaticProps() {
-  const worksDirectory = path.join(process.cwd(), "content/works");
-
-  let mdWorks = [];
-
-  if (fs.existsSync(worksDirectory)) {
-    const filenames = fs
-      .readdirSync(worksDirectory)
-      .filter((filename) => filename.endsWith(".md"));
-
-    mdWorks = filenames
-      .map((filename) => {
-        const filePath = path.join(worksDirectory, filename);
-        const fileContents = fs.readFileSync(filePath, "utf8");
-        const { data: frontMatter } = matter(fileContents);
-
-        return {
-          id: filename.replace(".md", ""),
-          title: frontMatter.title || "Untitled",
-          description: frontMatter.description || "",
-          thumbnail: frontMatter.thumbnail || "/images/works/prefab_01.jpg",
-          date: frontMatter.date || "",
-        };
-      })
-      .sort((a, b) => new Date(b.date) - new Date(a.date));
-  }
+  const mdWorks = await getPublishedWorks();
 
   return {
     props: { mdWorks },
+    revalidate: 10,
   };
 }
 

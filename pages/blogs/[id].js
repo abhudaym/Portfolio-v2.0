@@ -1,52 +1,55 @@
-import fs from 'fs';
-import path from 'path';
-import { Container, Heading, Text, Image, Box, Link } from "@chakra-ui/react";
+import {
+  Container,
+  Heading,
+  Text,
+  Image,
+  Box,
+  Link,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer
+} from "@chakra-ui/react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import Layout from "../../components/layouts/article";
 import Section from "../../components/section";
 import { BlogTitle } from "../../components/work";
 import NextLink from "next/link";
 import ReactMarkdown from 'react-markdown';
-import matter from 'gray-matter';
 import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
+import { getPublishedBlogs, getBlogBySlug } from '../../lib/sanity';
 
 export async function getStaticPaths() {
-  const blogsDirectory = path.join(process.cwd(), 'content/blogs');
+  const blogs = await getPublishedBlogs();
   
-  // Check if directory exists, if not return empty paths
-  if (!fs.existsSync(blogsDirectory)) {
-    return { paths: [], fallback: false };
-  }
-  
-  const filenames = fs.readdirSync(blogsDirectory);
-  
-  const paths = filenames
-    .filter(filename => filename.endsWith('.md'))
-    .map((filename) => ({
-      params: { id: filename.replace('.md', '') }
-    }));
+  const paths = blogs.map((blog) => ({
+    params: { id: blog.slug }
+  }));
 
-  return { paths, fallback: false };
+  // 'blocking' ensures new blog posts generated via ISR render on the server on first request
+  return { paths, fallback: 'blocking' };
 }
 
 export async function getStaticProps({ params }) {
-  const filePath = path.join(process.cwd(), 'content/blogs', `${params.id}.md`);
+  const blogData = await getBlogBySlug(params.id);
   
-  if (!fs.existsSync(filePath)) {
+  if (!blogData) {
     return {
       notFound: true
     };
   }
   
-  const fileContents = fs.readFileSync(filePath, 'utf8');
-  const { data: frontMatter, content } = matter(fileContents);
-  
   return { 
     props: { 
-      frontMatter,
-      content,
+      frontMatter: blogData.frontMatter,
+      content: blogData.content,
       id: params.id
-    } 
+    },
+    revalidate: 60 // Revalidate every 60 seconds
   };
 }
 
@@ -94,6 +97,7 @@ const Blog = ({ frontMatter, content, id }) => {
         <Box className="markdown-content">
           <ReactMarkdown 
             rehypePlugins={[rehypeRaw]}
+            remarkPlugins={[remarkGfm]}
             components={{
               // Custom styling for HTML elements
               video: ({node, ...props}) => (
@@ -128,6 +132,18 @@ const Blog = ({ frontMatter, content, id }) => {
                   }}
                 />
               ),
+              table: ({ children }) => (
+                <TableContainer my={4} border="1px" borderColor="gray.200" borderRadius="md" _dark={{ borderColor: "gray.700" }}>
+                  <Table variant="simple" size="sm">
+                    {children}
+                  </Table>
+                </TableContainer>
+              ),
+              thead: ({ children }) => <Thead>{children}</Thead>,
+              tbody: ({ children }) => <Tbody>{children}</Tbody>,
+              tr: ({ children }) => <Tr>{children}</Tr>,
+              th: ({ children }) => <Th>{children}</Th>,
+              td: ({ children }) => <Td>{children}</Td>,
             }}
           >
             {content}

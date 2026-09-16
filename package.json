@@ -12,17 +12,20 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@portabletext/react": "^6.2.0",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "framer-motion": "^4",
     "gray-matter": "^4.0.3",
     "next": "^13.5.11",
+    "next-sanity": "^5.5.11",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^4.3.1",
     "react-markdown": "^10.1.0",
     "react-pdf": "^5.6.0",
-    "rehype-raw": "^7.0.0"
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "eslint": "8.4.1",

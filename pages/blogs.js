@@ -2,38 +2,15 @@ import { Heading, SimpleGrid, Text, Box } from "@chakra-ui/react";
 import Section from "../components/section";
 import { BlogGridItem, GridItemStyle } from "../components/grid-item";
 import Layout from "../components/layouts/article";
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
+import { getPublishedBlogs } from '../lib/sanity';
 
 export async function getStaticProps() {
-  const blogsDirectory = path.join(process.cwd(), 'content/blogs');
-  
-  // Check if directory exists, if not return empty blogs
-  if (!fs.existsSync(blogsDirectory)) {
-    return { props: { blogs: [] } };
-  }
-  
-  const filenames = fs.readdirSync(blogsDirectory);
-  
-  const blogs = filenames
-    .filter(filename => filename.endsWith('.md'))
-    .map((filename) => {
-      const filePath = path.join(blogsDirectory, filename);
-      const fileContents = fs.readFileSync(filePath, 'utf8');
-      const { data: frontMatter } = matter(fileContents);
-      
-      return {
-        id: filename.replace('.md', ''),
-        title: frontMatter.title || 'Untitled',
-        description: frontMatter.description || '',
-        thumbnail: frontMatter.thumbnail || '/images/blogs/blog_01.jpg',
-        date: frontMatter.date || ''
-      };
-    })
-    .sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by date, newest first
+  const blogs = await getPublishedBlogs();
 
-  return { props: { blogs } };
+  return { 
+    props: { blogs },
+    revalidate: 60 // Revalidate every 60 seconds for ISR
+  };
 }
 
 const Blogs = ({ blogs }) => {
@@ -62,7 +39,7 @@ const Blogs = ({ blogs }) => {
           {blogs.map((blog) => (
             <Section key={blog.id}>
               <BlogGridItem
-                id={blog.id}
+                id={blog.slug}
                 title={blog.title}
                 thumbnail={blog.thumbnail}
               >
