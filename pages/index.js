@@ -11,6 +11,7 @@ import { getProfile, getExperiences, getSkills, getVolunteer, getPublishedWorks,
 import { SITE, ABOUT, EXPERIENCE, VOLUNTEER, SKILLS, INTERESTS, SOCIALS } from "../lib/site";
 import { LEGACY_WORKS } from "../lib/legacyWorks";
 import { enhancementFor } from "../lib/enhancements";
+import { track } from "../lib/track";
 
 export default function Home({ profile, experiences, skills, volunteer, works, latest }) {
   const p = profile || {};
@@ -90,10 +91,10 @@ export default function Home({ profile, experiences, skills, volunteer, works, l
         <h2>On the web</h2>
         <div className="rows">
           {socials.map((s) => (
-            <a key={s.label} href={s.href} target="_blank" rel="noreferrer"><small>{s.kind}</small>{s.label} <span className="aside">{s.handle}</span></a>
+            <a key={s.label} href={s.href} target="_blank" rel="noreferrer" onClick={() => track("social_click", { site: s.label })}><small>{s.kind}</small>{s.label} <span className="aside">{s.handle}</span></a>
           ))}
         </div>
-        <p className="mail">Get in touch › <a href={"mailto:" + email}>{email}</a></p>
+        <p className="mail">Get in touch › <a href={"mailto:" + email} onClick={() => track("email_click", { from: "home" })}>{email}</a></p>
       </Reveal>
     </>
   );

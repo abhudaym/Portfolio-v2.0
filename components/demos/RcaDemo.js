@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { track } from "../../lib/track";
 
 const POOL = {
   cw: ["INFO  GET /health 200 4ms", "INFO  order.created id=88213", "WARN  slow response 812ms /api/orders", "INFO  cache hit ratio 0.93", "INFO  GET /api/risk 200 61ms", "INFO  worker heartbeat ok"],
@@ -34,6 +35,7 @@ export default function RcaDemo() {
   const say = (node) => setOut((o) => [...(o || []), node]);
   const run = () => {
     if (busy) return;
+    track("rca_demo_run");
     setBusy(true); setOut([]); setOff({});
     setLogs((l) => Object.fromEntries(Object.entries(l).map(([k, v]) => [k, v.map((x) => ({ ...x, rel: false }))])));
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches, f = reduce ? 0.25 : 1;

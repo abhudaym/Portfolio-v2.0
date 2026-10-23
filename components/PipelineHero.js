@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { track } from "../lib/track";
 
 const LANES = [
   { label: "CRIS 2.0 · ingestion", color: "teal", rate: 13, failAt: 3, nodes: [
@@ -198,7 +199,7 @@ export default function PipelineHero({ kicker, name, tagline, now, target, bestW
     let v = e.target.value;
     if (v.length > target.length) { v = v.slice(0, target.length); e.target.value = v; }
     const T = typing.current, now = performance.now();
-    if (!T.started && v.length) T.started = now;
+    if (!T.started && v.length) { T.started = now; track("typing_test_start"); }
     if (v.length > T.prev) {
       T.keys++;
       for (let i = T.prev; i < v.length; i++) if (v[i] !== target[i]) T.errs++;
@@ -210,6 +211,7 @@ export default function PipelineHero({ kicker, name, tagline, now, target, bestW
     if (v === target) {
       const w = wpm(target.length, now), accuracy = Math.max(0, Math.round(100 * (1 - T.errs / Math.max(1, T.keys))));
       setResult({ w, acc: accuracy });
+      track("typing_test_done", { wpm: w, accuracy });
       requestAnimationFrame(() => setBars(true));
       sim.current && sim.current.inject(1, 30);
       inpRef.current && inpRef.current.blur();

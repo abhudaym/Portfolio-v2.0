@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { NAV, SITE } from "../lib/site";
+import { track } from "../lib/track";
 
 const score = (q, t) => {
   q = q.toLowerCase(); t = t.toLowerCase();
@@ -27,7 +28,7 @@ export default function CommandPalette({ open, onClose, toggleTheme, email }) {
     }
   }, [open]); // eslint-disable-line
 
-  const go = useCallback((href) => { onClose(); router.push(href); }, [onClose, router]);
+  const go = useCallback((href) => { track("palette_go", { to: href }); onClose(); router.push(href); }, [onClose, router]);
 
   const items = useMemo(() => {
     const base = [
@@ -35,7 +36,7 @@ export default function CommandPalette({ open, onClose, toggleTheme, email }) {
       { t: "Toggle light / dark theme", k: "action", run: () => { toggleTheme(); onClose(); } },
       { t: "Take the typing test", k: "action", run: () => { go("/"); setTimeout(() => { const i = document.getElementById("inp"); i && i.focus(); window.scrollTo({ top: 0, behavior: "smooth" }); }, 400); } },
       { t: "Copy email address", k: "action", run: () => { try { navigator.clipboard.writeText(email || SITE.email); } catch (e) {} onClose(); } },
-      { t: "sudo hire abhuday", k: "easter egg", run: () => { window.location.href = "mailto:" + (email || SITE.email) + "?subject=" + encodeURIComponent("Let's talk (sudo)"); onClose(); } },
+      { t: "sudo hire abhuday", k: "easter egg", run: () => { track("sudo_hire"); window.location.href = "mailto:" + (email || SITE.email) + "?subject=" + encodeURIComponent("Let's talk (sudo)"); onClose(); } },
     ];
     const rem = (remote || []).map((r) => ({ t: r.title, k: r.type, run: () => go(r.href) }));
     return [...base, ...rem].map((i) => ({ ...i, s: score(q, i.t) })).filter((i) => i.s > 0).sort((a, b) => b.s - a.s).slice(0, 30);

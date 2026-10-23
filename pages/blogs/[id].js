@@ -6,6 +6,7 @@ import CountUp from "../../components/CountUp";
 import { getPublishedBlogs, getBlogBySlug } from "../../lib/sanity";
 import { enhancementFor } from "../../lib/enhancements";
 import { extractToc, injectDemos, readMinutes } from "../../lib/md";
+import { track } from "../../lib/track";
 
 export async function getStaticPaths() {
   const blogs = await getPublishedBlogs();
@@ -40,6 +41,17 @@ const fmt = (d) => (d ? new Date(d).toLocaleDateString("en-GB", { day: "2-digit"
 
 export default function Post({ fm, content, toc }) {
   const [active, setActive] = useState(null);
+
+  useEffect(() => {
+    const sent = {};
+    const on = () => {
+      const h = document.documentElement, max = h.scrollHeight - innerHeight;
+      const pct = max > 0 ? scrollY / max : 0;
+      [50, 90].forEach((m) => { if (pct * 100 >= m && !sent[m]) { sent[m] = true; track("post_read_" + m, { post: fm.title }); } });
+    };
+    addEventListener("scroll", on, { passive: true });
+    return () => removeEventListener("scroll", on);
+  }, [fm.title]);
 
   useEffect(() => {
     const on = () => {

@@ -3,6 +3,7 @@ import NextLink from "next/link";
 import Markdown from "../../components/Markdown";
 import { getPublishedWorks, getWorkBySlug } from "../../lib/sanity";
 import { LEGACY_WORKS } from "../../lib/legacyWorks";
+import { track } from "../../lib/track";
 
 export async function getStaticPaths() {
   const works = await getPublishedWorks();
@@ -33,8 +34,8 @@ export default function Work({ work }) {
           <Row k="Year">{fmt(work.date)}</Row>
           <Row k="Platform">{work.platform}</Row>
           <Row k="Stack">{work.stack}</Row>
-          <Row k="Website">{work.website && <a href={work.website} target="_blank" rel="noreferrer">{work.website}</a>}</Row>
-          <Row k="Source">{work.source && <a href={work.source} target="_blank" rel="noreferrer">{work.source}</a>}</Row>
+          <Row k="Website">{work.website && <a href={work.website} target="_blank" rel="noreferrer" onClick={() => track("work_link", { work: work.title, kind: "website" })}>{work.website}</a>}</Row>
+          <Row k="Source">{work.source && <a href={work.source} target="_blank" rel="noreferrer" onClick={() => track("work_link", { work: work.title, kind: "source" })}>{work.source}</a>}</Row>
         </ul>
         {work.thumbnail && !work.content && <img src={work.thumbnail} alt={work.title} style={{ width: "100%", borderRadius: 12 }} />}
         {work.content && <Markdown playbackRate={2}>{work.content}</Markdown>}

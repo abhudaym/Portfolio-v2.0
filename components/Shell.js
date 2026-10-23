@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { NAV, SITE } from "../lib/site";
 import useTheme from "./useTheme";
 import CommandPalette from "./CommandPalette";
+import { track } from "../lib/track";
 
 export default function Shell({ children }) {
   const router = useRouter();
@@ -15,8 +16,8 @@ export default function Shell({ children }) {
   useEffect(() => {
     const onKey = (e) => {
       const typing = /input|textarea|select/i.test((e.target && e.target.tagName) || "");
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); setOpen((o) => !o); }
-      else if (e.key === "/" && !typing) { e.preventDefault(); setOpen(true); }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); setOpen((o) => { if (!o) track("palette_open"); return !o; }); }
+      else if (e.key === "/" && !typing) { e.preventDefault(); track("palette_open"); setOpen(true); }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -50,7 +51,7 @@ export default function Shell({ children }) {
           {NAV.filter((n) => n.href !== "/").map((n) => (
             <NextLink key={n.href} href={n.href} className={"l" + (active(n.href) ? " on" : "")}>{n.label}</NextLink>
           ))}
-          <button type="button" className="kbd-btn" onClick={() => setOpen(true)} aria-label="Open command palette">
+          <button type="button" className="kbd-btn" onClick={() => { track("palette_open"); setOpen(true); }} aria-label="Open command palette">
             <span>search</span><kbd>⌘K</kbd>
           </button>
           <button type="button" className="icon-btn" onClick={toggleTheme} aria-label="Toggle theme" title={"Theme: " + theme}>

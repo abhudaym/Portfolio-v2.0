@@ -29,3 +29,11 @@ npm run dev
 ```
 
 No access to Sanity (CI, offline)? `SANITY_OFFLINE=1 npm run build` uses `content/blogs/*.md` as fixtures.
+
+## Analytics
+
+Page views per page come from Vercel Web Analytics (already wired in `_app.js`). Custom events go through `lib/track.js`:
+
+`resume_open`, `resume_download`, `social_click` (site), `email_click`, `typing_test_start`, `typing_test_done` (wpm, accuracy), `rca_demo_run`, `palette_open`, `palette_go` (to), `sudo_hire`, `work_link` (work, kind), `post_read_50` / `post_read_90` (post).
+
+See them in Vercel → your project → Analytics → Events. Custom events need a Pro plan; page views work on the free plan.
