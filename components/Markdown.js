@@ -4,6 +4,7 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import { slugify } from "../lib/md";
 import { DEMOS } from "./demos";
+import Flow from "./Flow";
 
 const text = (c) => (Array.isArray(c) ? c.map(text).join("") : typeof c === "object" && c ? text(c.props && c.props.children) : String(c ?? ""));
 
@@ -40,6 +41,7 @@ export default function Markdown({ children, playbackRate }) {
             const cls = (el && el.props && el.props.className) || "";
             const lang = (/language-([\w-]+)/.exec(cls) || [])[1];
             const raw = text(el && el.props && el.props.children).replace(/\n$/, "");
+            if (lang === "flow") return <Flow source={raw} />;
             if (lang === "demo") {
               const meta = node && node.children && node.children[0] && node.children[0].data && node.children[0].data.meta;
               const D = DEMOS[(meta || raw).trim()];

@@ -322,3 +322,36 @@ button { font-family: inherit; }
   #title p { max-width: 30ch; }
   .pdf { height: 600px; }
 }
+
+/* ============ flow block (```flow in markdown) ============ */
+.flow { margin: 22px 0; padding: 18px; border: 1px solid var(--line); border-radius: 16px; background: var(--bg2); display: grid; gap: 22px; }
+.flow-title { font: 500 11px "JetBrains Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pink); margin-bottom: 10px; }
+.flow-group:nth-child(odd) .flow-title { color: var(--teal); }
+.flow-row { display: flex; flex-wrap: wrap; align-items: center; row-gap: 12px; }
+.flow-cell { display: flex; align-items: center; }
+.flow-node { position: relative; display: inline-flex; align-items: center; gap: 8px; font: 500 13px "JetBrains Mono", monospace; color: var(--ink); background: var(--node); border: 1.5px solid var(--line); border-radius: 10px; padding: 8px 12px; cursor: default; white-space: nowrap; transition: border-color 0.2s, transform 0.2s; }
+.flow-node.has-note { cursor: pointer; }
+.flow-node.sel { border-color: var(--pink); }
+.flow-i { font-size: 10px; color: var(--muted); }
+.flow-link { position: relative; width: 34px; height: 2px; margin: 0 4px; background: repeating-linear-gradient(90deg, var(--line) 0 4px, transparent 4px 8px); }
+.flow-link::after { content: ""; position: absolute; right: -2px; top: -4px; border: 5px solid transparent; border-left: 6px solid var(--line); border-right: 0; }
+.flow-link i { position: absolute; top: -3px; left: 0; width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 10px var(--teal); opacity: 0; }
+.flow-group:nth-child(even) .flow-link i { background: var(--pink); box-shadow: 0 0 10px var(--pink); }
+.flow-link.brk { visibility: hidden; }
+.flow-note { min-height: 1.6em; margin-top: 10px; color: var(--muted); font: 400 12.5px/1.5 "JetBrains Mono", monospace; }
+.flow-note b { color: var(--ink); font-weight: 500; margin-right: 6px; }
+
+.flow-node { --hit: var(--teal); }
+.flow-group:nth-child(even) .flow-node { --hit: var(--pink); }
+.flow-node.hit { border-color: var(--hit); box-shadow: 0 0 0 4px color-mix(in srgb, var(--hit) 18%, transparent), 0 0 18px color-mix(in srgb, var(--hit) 30%, transparent); transform: translateY(-1px); }
+.flow-link i { opacity: 1; animation: flow-move var(--step) linear forwards; }
+@keyframes flow-move { from { left: 0; } to { left: calc(100% - 8px); } }
+@media (max-width: 640px) {
+  .flow-row { flex-direction: column; align-items: flex-start; row-gap: 0; }
+  .flow-cell { flex-direction: column; align-items: flex-start; }
+  .flow-link { width: 2px; height: 22px; margin: 4px 0 4px 18px; background: repeating-linear-gradient(180deg, var(--line) 0 4px, transparent 4px 8px); }
+  .flow-link::after { right: auto; left: -4px; top: auto; bottom: -3px; border: 5px solid transparent; border-top: 6px solid var(--line); border-bottom: 0; }
+  .flow-link i { left: -3px; top: 0; animation-name: flow-move-v; }
+  @keyframes flow-move-v { from { top: 0; } to { top: calc(100% - 8px); } }
+}
+

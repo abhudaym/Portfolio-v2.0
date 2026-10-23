@@ -37,3 +37,14 @@ Page views per page come from Vercel Web Analytics (already wired in `_app.js`).
 `resume_open`, `resume_download`, `social_click` (site), `email_click`, `typing_test_start`, `typing_test_done` (wpm, accuracy), `rca_demo_run`, `palette_open`, `palette_go` (to), `sudo_hire`, `work_link` (work, kind), `post_read_50` / `post_read_90` (post).
 
 See them in Vercel → your project → Analytics → Events. Custom events need a Pro plan; page views work on the free plan.
+
+## Animated flow diagrams in posts
+
+Write a code block with language `flow` in Sanity markdown:
+
+    ```flow
+    Ingestion (once per document)
+    Documents -> Parser (turns PDFs into text) -> Chunker -> Embedder -> Vector store
+    ```
+
+A line with `->` is a row of steps, a line without one titles the next row, and `(text)` after a step becomes a note shown on hover or tap. Rows animate when scrolled into view and stack vertically on phones.

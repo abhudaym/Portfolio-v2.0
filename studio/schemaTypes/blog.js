@@ -93,7 +93,7 @@ export const blog = {
       title: 'Content',
       type: 'markdown',
       description:
-        'Markdown. To embed an interactive block add a fenced code block whose language is demo and whose only line is the demo name, e.g. a block opened with ```demo containing the single line rca. Available: rca, arch-mcp, pick-source, before-after.',
+        'Markdown. To embed an interactive block add a fenced code block whose language is demo and whose only line is the demo name, e.g. a block opened with ```demo containing the single line rca. Available: rca, arch-mcp, pick-source, before-after. For an animated flow diagram use a code block with language flow: one line per row of steps separated by ->, an optional title line above each row, and (notes) after a step.',
     },
   ],
 }
