@@ -27,6 +27,15 @@ export const experience = {
       type: 'url',
       description: 'Link to company website',
     },
+    { name: 'location', title: 'Location', type: 'string' },
+    { name: 'current', title: 'Current role', type: 'boolean', initialValue: false },
+    {
+      name: 'highlights',
+      title: 'Highlights',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'Optional bullets shown under the role on the timeline',
+    },
     {
       name: 'startDate',
       title: 'Start Date',

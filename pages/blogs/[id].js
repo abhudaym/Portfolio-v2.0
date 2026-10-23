@@ -1,165 +1,95 @@
-import {
-  Container,
-  Heading,
-  Text,
-  Image,
-  Box,
-  Link,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer
-} from "@chakra-ui/react";
-import { ChevronRightIcon } from "@chakra-ui/icons";
-import Layout from "../../components/layouts/article";
-import Section from "../../components/section";
-import { BlogTitle } from "../../components/work";
+import { useEffect, useMemo, useState } from "react";
+import Head from "next/head";
 import NextLink from "next/link";
-import ReactMarkdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw';
-import remarkGfm from 'remark-gfm';
-import { getPublishedBlogs, getBlogBySlug } from '../../lib/sanity';
+import Markdown from "../../components/Markdown";
+import CountUp from "../../components/CountUp";
+import { getPublishedBlogs, getBlogBySlug } from "../../lib/sanity";
+import { enhancementFor } from "../../lib/enhancements";
+import { extractToc, injectDemos, readMinutes } from "../../lib/md";
 
 export async function getStaticPaths() {
   const blogs = await getPublishedBlogs();
-  
-  const paths = blogs.map((blog) => ({
-    params: { id: blog.slug }
-  }));
-
-  // 'blocking' ensures new blog posts generated via ISR render on the server on first request
-  return { paths, fallback: 'blocking' };
+  return { paths: blogs.map((b) => ({ params: { id: b.slug } })), fallback: "blocking" };
 }
 
 export async function getStaticProps({ params }) {
-  const blogData = await getBlogBySlug(params.id);
-  
-  if (!blogData) {
-    return {
-      notFound: true
-    };
-  }
-  
-  return { 
-    props: { 
-      frontMatter: blogData.frontMatter,
-      content: blogData.content,
-      id: params.id
+  const data = await getBlogBySlug(params.id);
+  if (!data) return { notFound: true };
+  const fm = data.frontMatter;
+  const e = enhancementFor(fm.title) || {};
+  let content = data.content || "";
+  // only add bridge demos if the author hasn't placed any ```demo block themselves
+  if (e.inject && !/```demo/.test(content)) content = injectDemos(content, e.inject);
+  return {
+    props: {
+      fm: {
+        ...fm,
+        tags: fm.tags && fm.tags.length ? fm.tags : e.tags || [],
+        badges: fm.badges && fm.badges.length ? fm.badges : e.badges || [],
+        stats: fm.stats && fm.stats.length ? fm.stats : e.stats || [],
+        readTime: fm.readTime || readMinutes(data.content || ""),
+      },
+      content,
+      toc: extractToc(content),
     },
-    revalidate: 60 // Revalidate every 60 seconds
+    revalidate: 60,
   };
 }
 
-const Blog = ({ frontMatter, content, id }) => {
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
+const fmt = (d) => (d ? new Date(d).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : "");
+
+export default function Post({ fm, content, toc }) {
+  const [active, setActive] = useState(null);
+
+  useEffect(() => {
+    const on = () => {
+      let best = null;
+      toc.forEach((t) => { const el = document.getElementById(t.id); if (el && el.getBoundingClientRect().top < innerHeight * 0.35) best = t.id; });
+      setActive(best);
+    };
+    on();
+    addEventListener("scroll", on, { passive: true });
+    return () => removeEventListener("scroll", on);
+  }, [toc]);
+
+  const body = useMemo(() => <Markdown>{content}</Markdown>, [content]);
 
   return (
-    <Layout title={frontMatter.title || 'Blog Post'}>
-      <Container>
-        <BlogTitle>{frontMatter.title}</BlogTitle>
-        {frontMatter.description && (
-          <Text fontSize="lg" mb={4}>
-            {frontMatter.description}
-          </Text>
+    <div className="post">
+      <Head>
+        <title>{fm.title} - Abhuday Mishra</title>
+        <meta name="description" content={fm.description} />
+        {fm.image && <meta property="og:image" content={fm.image} />}
+      </Head>
+      <article>
+        <NextLink href="/blogs" className="back">← All reports</NextLink>
+        <div className="tagrow">
+          <span className="tag ok">Resolved</span>
+          {fm.date && <span className="tag">{fmt(fm.date)}</span>}
+          <span className="tag">{fm.readTime} min read</span>
+          {fm.badges.map((b) => <span key={b.label} className={"tag " + (b.kind || "win")}>{b.label}</span>)}
+        </div>
+        <h1>{fm.title}</h1>
+        {fm.description && <p className="sub">{fm.description}</p>}
+        {fm.stats.length > 0 && (
+          <div className="stats4">
+            {fm.stats.map((s) => (
+              <div key={s.label}>
+                {s.to ? <CountUp to={s.to} suf={s.suf || ""} /> : <b>{s.text}</b>}
+                <span>{s.label}</span>
+              </div>
+            ))}
+          </div>
         )}
-
-        {frontMatter.date && (
-          <Text fontSize="sm" color="gray.500" mb={4} fontStyle="italic">
-            Published on {formatDate(frontMatter.date)}
-          </Text>
-        )}
-
-        {frontMatter.image && (
-          <Box my={6}>
-            <Image
-              src={frontMatter.image}
-              alt={frontMatter.title}
-              borderRadius="lg"
-              w="full"
-              mb={4}
-              width={800}
-              height={400}
-            />
-          </Box>
-        )}
-
-        <Box className="markdown-content">
-          <ReactMarkdown 
-            rehypePlugins={[rehypeRaw]}
-            remarkPlugins={[remarkGfm]}
-            components={{
-              // Custom styling for HTML elements
-              video: ({node, ...props}) => (
-                <video 
-                  {...props} 
-                  style={{
-                    maxWidth: '100%',
-                    height: 'auto',
-                    borderRadius: '8px',
-                    margin: '1rem 0'
-                  }}
-                />
-              ),
-              iframe: ({node, ...props}) => (
-                <iframe 
-                  {...props} 
-                  style={{
-                    maxWidth: '100%',
-                    borderRadius: '8px',
-                    margin: '1rem 0'
-                  }}
-                />
-              ),
-              img: ({node, ...props}) => (
-                <img 
-                  {...props} 
-                  style={{
-                    maxWidth: '100%',
-                    height: 'auto',
-                    borderRadius: '8px',
-                    margin: '1rem 0'
-                  }}
-                />
-              ),
-              table: ({ children }) => (
-                <TableContainer my={4} border="1px" borderColor="gray.200" borderRadius="md" _dark={{ borderColor: "gray.700" }}>
-                  <Table variant="simple" size="sm">
-                    {children}
-                  </Table>
-                </TableContainer>
-              ),
-              thead: ({ children }) => <Thead>{children}</Thead>,
-              tbody: ({ children }) => <Tbody>{children}</Tbody>,
-              tr: ({ children }) => <Tr>{children}</Tr>,
-              th: ({ children }) => <Th>{children}</Th>,
-              td: ({ children }) => <Td>{children}</Td>,
-            }}
-          >
-            {content}
-          </ReactMarkdown>
-        </Box>
-
-        <Box align="center" my={4}>
-          <Link as={NextLink} href="/blogs">
-            <Text display="inline-flex" alignItems="center">
-              ← Back to Blogs <ChevronRightIcon />
-            </Text>
-          </Link>
-        </Box>
-      </Container>
-    </Layout>
+        {fm.image && <img src={fm.image} alt="" style={{ width: "100%", borderRadius: 12, border: "1px solid var(--line)", margin: "22px 0 0" }} />}
+        {body}
+        <p style={{ marginTop: 40 }}><NextLink href="/blogs" className="back">← All reports</NextLink></p>
+      </article>
+      {toc.length > 0 && (
+        <nav className="toc" aria-label="On this page">
+          {toc.map((t) => <a key={t.id} href={"#" + t.id} className={active === t.id ? "on" : ""}>{t.text}</a>)}
+        </nav>
+      )}
+    </div>
   );
-};
-
-export default Blog; 
+}

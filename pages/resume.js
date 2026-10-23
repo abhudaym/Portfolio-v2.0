@@ -1,89 +1,23 @@
-import {
-  Container,
-  Heading,
-  Box,
-  Button,
-  Flex,
-  useColorModeValue
-} from "@chakra-ui/react";
-import { DownloadIcon, ExternalLinkIcon } from "@chakra-ui/icons";
-import Layout from "../components/layouts/article";
+import Head from "next/head";
 import { getProfile } from "../lib/sanity";
 
 export async function getStaticProps() {
   const profile = await getProfile();
-
-  return {
-    props: {
-      pdfUrl: profile?.resumeUrl || "/resume.pdf",
-    },
-    revalidate: 60,
-  };
+  return { props: { pdfUrl: (profile && profile.resumeUrl) || "/resume.pdf" }, revalidate: 60 };
 }
 
-const ResumePage = ({ pdfUrl }) => {
-  const borderColor = useColorModeValue("gray.200", "gray.700");
-
+export default function Resume({ pdfUrl }) {
   return (
-    <Layout title="Resume">
-      <Container maxW="container.md" pt={3}>
-        <Flex
-          justifyContent="space-between"
-          alignItems="center"
-          mb={4}
-          flexWrap="wrap"
-          gap={3}
-        >
-          <Heading as="h3" fontSize={20} mt={0}>
-            Resume
-          </Heading>
-
-          <Flex gap={3}>
-            <Button
-              as="a"
-              href={pdfUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="ghost"
-              colorScheme="teal"
-              size="sm"
-              leftIcon={<ExternalLinkIcon />}
-            >
-              Open PDF
-            </Button>
-            <Button
-              as="a"
-              href={pdfUrl}
-              download="Abhuday_Mishra_Resume.pdf"
-              colorScheme="teal"
-              size="sm"
-              leftIcon={<DownloadIcon />}
-            >
-              Download PDF
-            </Button>
-          </Flex>
-        </Flex>
-
-        <Box
-          w="100%"
-          h={{ base: "600px", md: "850px" }}
-          borderRadius="lg"
-          overflow="hidden"
-          border="1px solid"
-          borderColor={borderColor}
-          shadow="sm"
-        >
-          <iframe
-            src={pdfUrl}
-            title="Resume PDF"
-            width="100%"
-            height="100%"
-            style={{ border: "none" }}
-          />
-        </Box>
-      </Container>
-    </Layout>
+    <div className="wrap" style={{ maxWidth: 900 }}>
+      <Head><title>Resume - Abhuday Mishra</title></Head>
+      <div className="bh" style={{ display: "flex", justifyContent: "space-between", alignItems: "end", gap: 12, flexWrap: "wrap" }}>
+        <div><div className="k">Resume</div><h1 style={{ margin: "8px 0 0" }}>The short version.</h1></div>
+        <div className="tagrow">
+          <a className="btn ghost" href={pdfUrl} target="_blank" rel="noreferrer">Open PDF</a>
+          <a className="btn" href={pdfUrl} download="Abhuday_Mishra_Resume.pdf">Download PDF</a>
+        </div>
+      </div>
+      <div className="pdf" style={{ marginTop: 28 }}><iframe src={pdfUrl} title="Resume PDF" /></div>
+    </div>
   );
-};
-
-export default ResumePage;
+}

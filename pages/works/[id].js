@@ -1,197 +1,45 @@
-import {
-  Container,
-  Text,
-  Image,
-  Box,
-  Link,
-  Badge,
-  List,
-  ListItem,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer
-} from "@chakra-ui/react";
-import { ChevronRightIcon } from "@chakra-ui/icons";
-import Layout from "../../components/layouts/article";
-import { Title, Meta } from "../../components/work";
+import Head from "next/head";
 import NextLink from "next/link";
-import ReactMarkdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw';
-import remarkGfm from 'remark-gfm';
-import { getPublishedWorks, getWorkBySlug } from '../../lib/sanity';
+import Markdown from "../../components/Markdown";
+import { getPublishedWorks, getWorkBySlug } from "../../lib/sanity";
+import { LEGACY_WORKS } from "../../lib/legacyWorks";
 
 export async function getStaticPaths() {
   const works = await getPublishedWorks();
-  
-  const paths = works.map((work) => ({
-    params: { id: work.id.toString() },
-  }));
-
-  return { paths, fallback: 'blocking' };
+  const ids = new Set([...works.map((w) => String(w.id)), ...LEGACY_WORKS.map((l) => l.id)]);
+  return { paths: [...ids].map((id) => ({ params: { id } })), fallback: "blocking" };
 }
 
 export async function getStaticProps({ params }) {
-  const workData = await getWorkBySlug(params.id);
-
-  if (!workData) {
-    return { notFound: true };
-  }
-
-  return {
-    props: {
-      frontMatter: workData.frontMatter,
-      content: workData.content,
-      id: params.id,
-    },
-    revalidate: 10,
-  };
+  const data = await getWorkBySlug(params.id);
+  if (data) return { props: { work: { ...data.frontMatter, content: data.content || "", images: [] } }, revalidate: 60 };
+  const l = LEGACY_WORKS.find((x) => x.id === params.id);
+  if (!l) return { notFound: true };
+  return { props: { work: { title: l.title, description: l.description, date: l.year, platform: l.platform, stack: l.stack, website: l.website, source: l.source, thumbnail: null, content: l.body, images: l.images } }, revalidate: 60 };
 }
 
-const WorkMarkdownPage = ({ frontMatter, content }) => {
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
+const Row = ({ k, children }) => children ? <li><span className="tag">{k}</span><span>{children}</span></li> : null;
+const fmt = (d) => (/^\d{4}$/.test(String(d)) ? d : d ? new Date(d).toLocaleDateString("en-GB", { month: "short", year: "numeric" }) : "");
 
+export default function Work({ work }) {
   return (
-    <Layout title={frontMatter.title || 'Work'}>
-      <Container>
-        <Title>{frontMatter.title}</Title>
-        <p>
-          {frontMatter.description}
-        </p>
-        <List ml={4} my={4}>
-          {frontMatter.website && (
-            <ListItem>
-              <Meta>Website</Meta>
-              <Link href={frontMatter.website} isExternal>
-                {frontMatter.website}
-              </Link>
-            </ListItem>
-          )}
-          {frontMatter.platform && (
-            <ListItem>
-              <Meta>Platform</Meta>
-              <span>{frontMatter.platform}</span>
-            </ListItem>
-          )}
-          {frontMatter.stack && (
-            <ListItem>
-              <Meta>Stack</Meta>
-              <span>{frontMatter.stack}</span>
-            </ListItem>
-          )}
-          {frontMatter.date && (
-            <ListItem>
-              <Meta>Date</Meta>
-              <span>{formatDate(frontMatter.date)}</span>
-            </ListItem>
-          )}
-          {frontMatter.source && (
-            <ListItem>
-              <Meta>Source</Meta>
-              <Link href={frontMatter.source} isExternal>
-                {frontMatter.source}
-              </Link>
-            </ListItem>
-          )}
-        </List>
-
-        {frontMatter.date && (
-          <Text fontSize="sm" color="gray.500" mb={4} fontStyle="italic">
-            Updated on {formatDate(frontMatter.date)}
-          </Text>
-        )}
-
-        {frontMatter.image && (
-          <Box my={6}>
-            <Image
-              src={frontMatter.image || frontMatter.thumbnail}
-              alt={frontMatter.title}
-              borderRadius="lg"
-              w="full"
-              mb={4}
-            />
-          </Box>
-        )}
-
-        <Box className="markdown-content">
-          <ReactMarkdown
-            rehypePlugins={[rehypeRaw]}
-            remarkPlugins={[remarkGfm]}
-            components={{
-              video: ({ node, ...props }) => (
-                <video
-                  {...props}
-                  style={{
-                    maxWidth: '100%',
-                    height: 'auto',
-                    borderRadius: '8px',
-                    margin: '1rem 0',
-                  }}
-                  onLoadedMetadata={(e) => {
-                    e.target.playbackRate = 2.0;
-                  }}
-                />
-              ),
-              iframe: ({ node, ...props }) => (
-                <iframe
-                  {...props}
-                  style={{
-                    maxWidth: '100%',
-                    borderRadius: '8px',
-                    margin: '1rem 0',
-                  }}
-                />
-              ),
-              img: ({ node, ...props }) => (
-                <img
-                  {...props}
-                  style={{
-                    maxWidth: '100%',
-                    height: 'auto',
-                    borderRadius: '8px',
-                    margin: '1rem 0',
-                  }}
-                />
-              ),
-              table: ({ children }) => (
-                <TableContainer my={4} border="1px" borderColor="gray.200" borderRadius="md" _dark={{ borderColor: "gray.700" }}>
-                  <Table variant="simple" size="sm">
-                    {children}
-                  </Table>
-                </TableContainer>
-              ),
-              thead: ({ children }) => <Thead>{children}</Thead>,
-              tbody: ({ children }) => <Tbody>{children}</Tbody>,
-              tr: ({ children }) => <Tr>{children}</Tr>,
-              th: ({ children }) => <Th>{children}</Th>,
-              td: ({ children }) => <Td>{children}</Td>,
-            }}
-          >
-            {content}
-          </ReactMarkdown>
-        </Box>
-
-        <Box align="center" my={4}>
-          <Link as={NextLink} href="/works">
-            <Text display="inline-flex" alignItems="center">
-              ← Back to Works <ChevronRightIcon />
-            </Text>
-          </Link>
-        </Box>
-      </Container>
-    </Layout>
+    <div className="post" style={{ gridTemplateColumns: "minmax(0, 720px)" }}>
+      <Head><title>{work.title} - Abhuday Mishra</title><meta name="description" content={work.description} /></Head>
+      <article>
+        <NextLink href="/works" className="back">← All works</NextLink>
+        <h1>{work.title}</h1>
+        {work.description && <p className="sub">{work.description}</p>}
+        <ul className="meta-list">
+          <Row k="Year">{fmt(work.date)}</Row>
+          <Row k="Platform">{work.platform}</Row>
+          <Row k="Stack">{work.stack}</Row>
+          <Row k="Website">{work.website && <a href={work.website} target="_blank" rel="noreferrer">{work.website}</a>}</Row>
+          <Row k="Source">{work.source && <a href={work.source} target="_blank" rel="noreferrer">{work.source}</a>}</Row>
+        </ul>
+        {work.thumbnail && !work.content && <img src={work.thumbnail} alt={work.title} style={{ width: "100%", borderRadius: 12 }} />}
+        {work.content && <Markdown playbackRate={2}>{work.content}</Markdown>}
+        {work.images.length > 0 && <div className="shots">{work.images.map((src) => <img key={src} src={src} alt={work.title} loading="lazy" />)}</div>}
+      </article>
+    </div>
   );
-};
-
-export default WorkMarkdownPage;
+}
