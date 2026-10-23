@@ -59,8 +59,8 @@ export default function Blogs({ blogs }) {
               </div>
               <h3>{b.title}</h3>
               <p>{b.description}</p>
-              {b.stats.filter((s) => s.to).length > 0 && (
-                <div className="mets">{b.stats.filter((s) => s.to).slice(0, 3).map((s) => <div key={s.label}><b>{s.to}{s.suf}</b>{s.label}</div>)}</div>
+              {b.stats.length > 0 && (
+                <div className="mets">{b.stats.slice(0, 3).map((s) => <div key={s.label}><b>{s.to != null ? s.to + (s.suf || "") : s.text}</b>{s.label}</div>)}</div>
               )}
               {b.tags.length > 0 && <div className="tagrow" style={{ marginBottom: 14 }}>{b.tags.map((t) => <span key={t} className="tag">{t}</span>)}</div>}
               <span className="go">Read the report →</span>

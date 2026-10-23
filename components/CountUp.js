@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 export default function CountUp({ to, suf = "", ms = 1100 }) {
   const ref = useRef(null);
+  const dec = (String(to).split(".")[1] || "").length;
   const [v, setV] = useState(0);
   useEffect(() => {
     const el = ref.current;
@@ -11,7 +12,7 @@ export default function CountUp({ to, suf = "", ms = 1100 }) {
       const t0 = performance.now();
       const f = (n) => {
         const k = Math.min(1, (n - t0) / ms);
-        setV(Math.round(to * (1 - Math.pow(1 - k, 3))));
+        setV(to * (1 - Math.pow(1 - k, 3)));
         if (k < 1) raf = requestAnimationFrame(f);
       };
       raf = requestAnimationFrame(f);
@@ -21,5 +22,5 @@ export default function CountUp({ to, suf = "", ms = 1100 }) {
     io.observe(el);
     return () => { io && io.disconnect(); cancelAnimationFrame(raf); };
   }, [to, ms]);
-  return <b ref={ref}>{v}{suf}</b>;
+  return <b ref={ref}>{v.toFixed(dec)}{suf}</b>;
 }
