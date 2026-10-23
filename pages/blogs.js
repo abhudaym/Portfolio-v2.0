@@ -33,8 +33,8 @@ export default function Blogs({ blogs }) {
       <Head><title>Blogs - Abhuday Mishra</title></Head>
       <div className="bh">
         <div className="k" style={{ color: "var(--pink)" }}>Blogs · incident reports</div>
-        <h1>The unglamorous reality of AI in production.</h1>
-        <p>Evaluation, failure modes, and the decisions that move outcomes. Filed like postmortems, because that&apos;s what they are.</p>
+        <h1>Notes from production.</h1>
+        <p>Evaluation, failure modes, and what I&apos;d do differently. Filed like postmortems.</p>
       </div>
 
       {hasDemo && <RcaDemo />}
