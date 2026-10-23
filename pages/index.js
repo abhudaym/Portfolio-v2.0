@@ -1,411 +1,119 @@
-import {
-  Box,
-  Container,
-  Heading,
-  Image,
-  useColorModeValue,
-  Button,
-  SimpleGrid,
-  Link,
-  List,
-  ListItem,
-  Icon,
-  Text,
-} from "@chakra-ui/react";
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
-import Section from "../components/section";
-import Paragraph from "../components/paragraph";
-import { ChevronRightIcon } from "@chakra-ui/icons";
-import Layout from "../components/layouts/article";
-import NextLink from "next/link";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
-import { getProfile, getExperiences, getSkills } from "../lib/sanity";
-import { BioSection, BioYear } from "../components/bio";
-import {
-  IoLogoInstagram,
-  IoLogoGithub,
-  IoLogoLinkedin,
-  IoLogoTwitter,
-  IoMusicalNotes,
-  IoGuitar,
-  IoPiano,
-  IoMic,
-  IoBook,
-  IoBasketball,
-  IoCode,
-  IoBrush,
-  IoLaptop,
-} from "react-icons/io5";
+import NextLink from "next/link";
+import PipelineHero from "../components/PipelineHero";
+import Reveal from "../components/Reveal";
+import Timeline from "../components/Timeline";
+import Spot from "../components/Spot";
+import { getProfile, getExperiences, getSkills, getVolunteer, getPublishedWorks, getPublishedBlogs } from "../lib/sanity";
+import { SITE, ABOUT, EXPERIENCE, VOLUNTEER, SKILLS, INTERESTS, SOCIALS } from "../lib/site";
+import { LEGACY_WORKS } from "../lib/legacyWorks";
+import { enhancementFor } from "../lib/enhancements";
+import { track } from "../lib/track";
 
-export default function Home({ profile, experiences, skills }) {
+export default function Home({ profile, experiences, skills, volunteer, works, latest }) {
+  const p = profile || {};
+  const exp = experiences && experiences.length ? experiences : EXPERIENCE;
+  const vol = volunteer && volunteer.length ? volunteer : VOLUNTEER;
+  const sk = skills && skills.length ? skills : SKILLS;
+  const love = p.interests && p.interests.length ? p.interests : INTERESTS;
+  const socials = p.socials && p.socials.length ? p.socials : SOCIALS;
+  const email = p.email || SITE.email;
+  const target = p.typingChallenge || SITE.typingChallenge;
+
   return (
-    <Layout>
-      <Container>
-        <Box display={{ md: "flex" }} mt={4}>
-          <Box flexGrow={1}>
-            <Heading as="h2" variant="page-title">
-              Abhuday Mishra
-            </Heading>
-            <p>SDE-2 at AiDash</p>
-            <br />
+    <>
+      <Head><title>{SITE.name}</title></Head>
+      <PipelineHero
+        kicker={p.kicker || SITE.kicker}
+        name={SITE.name}
+        tagline={p.tagline || SITE.tagline}
+        now={p.now || SITE.now}
+        target={target}
+        bestWpm={p.bestWpm || SITE.bestWpm}
+        rate={p.heroRate || SITE.heroRate}
+        lines={p.heroLines && p.heroLines.length ? p.heroLines : SITE.heroLines}
+      />
 
-            <Box
-              borderRadius="lg"
-              bg={useColorModeValue("whiteAlpha.500", "whiteAlpha.200")}
-              p={3}
-              mb={6}
-              align="center"
-            >
-              Get in touch <ChevronRightIcon />{" "}
-              <Link href="mailto: abhuday.mishra@hotmail.com">
-                abhuday.mishra@hotmail.com
-              </Link>
-            </Box>
-          </Box>
-          <Box
-            flexShrink={0}
-            mt={{ base: 4, md: 0 }}
-            ml={{ md: 6 }}
-            align="center"
-          >
-            <Image
-              borderColor="whiteAlpha.800"
-              borderWidth={2}
-              borderStyle="solid"
-              maxWidth="100px"
-              display="inline-block"
-              borderRadius="full"
-              src="/images/newdp.jpeg"
-              alt="Profile Image"
-            />
-          </Box>
-        </Box>
-        <Section delay={0.1}>
-          <Heading as="h3" variant={"section-title"}>
-            Work
-          </Heading>
-          {profile?.about ? (
-            <Markdown 
-              rehypePlugins={[rehypeRaw]}
-              remarkPlugins={[remarkGfm]}
-              components={{ p: ({ children }) => <Paragraph>{children}</Paragraph> }}
-            >
-              {profile.about}
-            </Markdown>
-          ) : (
-            <Paragraph>
-              Abhuday Mishra (yes, he&apos;s referring to himself in the third person, and yes, he knows it&apos;s weird) is a software engineer at AiDash, where he spends his days wrangling Java and Spring Boot to build tech that fights climate change. His pride and joy? The Climate Risk Intelligence System (CRIS), a powerhouse of satellite imagery, real-time weather data, and vegetation insights that predict outages before storms and wildfires even think about making landfall.
-              <br />
-              <br />
-              When he&apos;s not busy saving the world (or at least trying to), Abhuday can be found either chasing a shuttlecock on the badminton court or shooting some hoops. And if he&apos;s not on the court, he&apos;s likely plucking away on his guitar, playing piano, or just singing his heart out for no reason at all. Whether it&apos;s sports or music, it&apos;s his way of staying sane - because, let&apos;s be real, talking about yourself in third person can only take you so far.
-              <br />
-              <br />
-              He also writes about technology, software engineering, and his experiences in the industry. From deep dives into frameworks and tools to insights about building scalable systems, his blog posts cover various aspects of modern software development.
-            </Paragraph>
-          )}
-          <Box align="center" my={4}>
-            <Box display="flex" gap={4} flexWrap="wrap" justifyContent="center">
-              <Link as={NextLink} href="/works">
-                <Button rightIcon={<ChevronRightIcon />} colorScheme="teal">
-                  My Portfolio
-                </Button>
-              </Link>
-              <Link as={NextLink} href="/blogs">
-                <Button rightIcon={<ChevronRightIcon />} colorScheme="teal">
-                  My Blogs
-                </Button>
-              </Link>
-            </Box>
-          </Box>
-        </Section>
+      <Reveal as="section" className="s" id="work">
+        <h2>Work</h2>
+        {p.about ? (
+          <Markdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]}>{p.about}</Markdown>
+        ) : (
+          ABOUT.map((t, i) => <p key={i}>{t}</p>)
+        )}
+        <div className="work-teasers">
+          {works.map((w) => (
+            <Spot key={w.id} href={"/works/" + w.id}>
+              <div className="thumb" style={{ backgroundImage: `url(${w.thumbnail})` }} />
+              <div className="body"><span className="tag">{w.stack ? w.stack.split(",")[0] : "project"}</span><h3>{w.title}</h3><p>{w.description}</p></div>
+            </Spot>
+          ))}
+        </div>
+        <p style={{ marginTop: 18 }}><NextLink href="/works" className="go mono">All works →</NextLink></p>
+      </Reveal>
 
-        <Section delay={0.2}>
-         <Heading as="h3" variant="section-title">
-           Experience
-         </Heading>
-         {experiences && experiences.length > 0 ? (
-           experiences.map((exp) => (
-             <BioSection key={exp._id}>
-               <BioYear>{exp.period}</BioYear>
-               {exp.role} at{" "}
-               <strong>
-                 {exp.companyUrl ? (
-                   <Link href={exp.companyUrl} target="_blank">
-                     {exp.company}
-                   </Link>
-                 ) : (
-                   exp.company
-                 )}
-               </strong>
-             </BioSection>
-           ))
-         ) : (
-           <>
-             <BioSection>
-               <BioYear>04/2025 - Present</BioYear>
-               Software Engineer 2 at{" "}
-               <strong>
-                 <Link href="https://www.aidash.com/climate-risk-intelligence-system/" target="_blank">
-                   AiDash
-                 </Link>
-               </strong>
-             </BioSection>
-             <BioSection>
-               <BioYear>07/2023 - 03/2025</BioYear>
-               Software Engineer 1 at{" "}
-               <strong>
-                 <Link href="https://www.aidash.com/climate-risk-intelligence-system/" target="_blank">
-                   AiDash
-                 </Link>
-               </strong>
-             </BioSection>
-             <BioSection>
-               <BioYear>11/2022 - 06/2023</BioYear>
-               Software Engineer Intern at{" "}
-               <strong>
-                 <Link href="https://www.aidash.com/climate-risk-intelligence-system/" target="_blank">
-                   AiDash
-                 </Link>
-               </strong>
-             </BioSection>
-             <BioSection>
-               <BioYear>01/2022 - 10/2022</BioYear>
-               Software Engineer Intern at{" "}
-               <strong>
-                 <Link href="https://rivi.co" target="_blank">
-                   Rivi
-                 </Link>
-               </strong>
-             </BioSection>
-             <BioSection>
-               <BioYear>07/2021 - 11/2021</BioYear>
-               Software Engineer Intern at{" "}
-               <strong>
-                 <Link href="https://cloud.kreator3d.com/" target="_blank">
-                   Kreator3D
-                 </Link>
-               </strong>
-             </BioSection>
-           </>
-         )}
-       </Section>
+      {latest && (
+        <Reveal as="section" className="s" id="latest">
+          <h2>Latest report</h2>
+          <NextLink href={"/blogs/" + latest.slug} className="report" onPointerMove={(e) => { const r = e.currentTarget.getBoundingClientRect(); e.currentTarget.style.setProperty("--mx", e.clientX - r.left + "px"); e.currentTarget.style.setProperty("--my", e.clientY - r.top + "px"); }}>
+            <div className="tagrow">{latest.date && <span className="tag">{new Date(latest.date).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</span>}{(latest.badges || []).map((b) => <span key={b.label} className={"tag " + (b.kind || "win")}>{b.label}</span>)}</div>
+            <h3>{latest.title}</h3>
+            <p>{latest.description}</p>
+            <span className="go">Read the report →</span>
+          </NextLink>
+        </Reveal>
+      )}
 
-        <Section delay={0.3}>
-          <Heading as="h3" variant="section-title">
-            Skills
-          </Heading>
-          <SimpleGrid columns={2} spacingX={10} spacingY={2}>
-            {skills && skills.length > 0 ? (
-              skills.map((skill) => (
-                <p key={skill._id}>{skill.name}</p>
-              ))
-            ) : (
-              <>
-                <p>Java</p>
-                <p>Python</p>
-                <p>C/C++</p>
-                <p>JavaScript/TypeScript</p>
-                <p>ReactJS</p>
-                <p>NextJS</p>
-                <p>Spring Boot</p>
-                <p>NodeJS/Express</p>
-                <p>MongoDB</p>
-                <p>PostgreSQL</p>
-                <p>AWS</p>
-                <p>RabbitMQ</p>
-                <p>HTML/CSS</p>
-                <p>Git</p>
-              </>
-            )}
-          </SimpleGrid>
-        </Section>
+      <Reveal as="section" className="s" id="experience">
+        <h2>Experience</h2>
+        <Timeline items={exp} />
+      </Reveal>
 
-        <Section delay={0.4}>
-          <Heading as="h3" variant="section-title">
-            Volunteer Experience
-          </Heading>
-          <BioSection>
-            <BioYear>09/2020 - 07/2021</BioYear>
-            Associate Technical Lead at <strong>DSC SRM</strong>
-          </BioSection>
-          <BioSection>
-            <BioYear>03/2020 - 03/2021</BioYear>
-            Web Developer at <strong>Webarch Club</strong>
-          </BioSection>
-          <BioSection>
-            <BioYear>08/2019 - 03/2022</BioYear>
-            Web Developer at <strong>Aakash Research Labs</strong>
-          </BioSection>
-        </Section>
+      <Reveal as="section" className="s" id="skills">
+        <h2>Skills</h2>
+        <div className="chips">{sk.map((s) => <span className="chip" key={s._id}>{s.name}</span>)}</div>
+      </Reveal>
 
-        <Section delay={0.5}>
-          <Heading as="h3" variant="section-title">
-            I ❤
-          </Heading>
-          <SimpleGrid columns={[1, 2, 3]} spacing={4} mt={4}>
-            <Box
-              p={4}
-              borderRadius="lg"
-              border="1px"
-              borderColor="gray.200"
-              _dark={{ borderColor: "gray.700" }}
-              textAlign="center"
-              transition="all 0.2s"
-              _hover={{ transform: "translateY(-2px)", shadow: "md" }}
-            >
-              <Icon as={IoMusicalNotes} boxSize={6} color="purple.500" mb={2} />
-              <Text fontWeight="semibold">Music</Text>
-            </Box>
-            <Box
-              p={4}
-              borderRadius="lg"
-              border="1px"
-              borderColor="gray.200"
-              _dark={{ borderColor: "gray.700" }}
-              textAlign="center"
-              transition="all 0.2s"
-              _hover={{ transform: "translateY(-2px)", shadow: "md" }}
-            >
-              <Icon as={IoMic} boxSize={6} color="pink.500" mb={2} />
-              <Text fontWeight="semibold">Singing</Text>
-            </Box>
-            <Box
-              p={4}
-              borderRadius="lg"
-              border="1px"
-              borderColor="gray.200"
-              _dark={{ borderColor: "gray.700" }}
-              textAlign="center"
-              transition="all 0.2s"
-              _hover={{ transform: "translateY(-2px)", shadow: "md" }}
-            >
-              <Icon as={IoBasketball} boxSize={6} color="red.500" mb={2} />
-              <Text fontWeight="semibold">Badminton</Text>
-            </Box>
-            <Box
-              p={4}
-              borderRadius="lg"
-              border="1px"
-              borderColor="gray.200"
-              _dark={{ borderColor: "gray.700" }}
-              textAlign="center"
-              transition="all 0.2s"
-              _hover={{ transform: "translateY(-2px)", shadow: "md" }}
-            >
-              <Icon as={IoBasketball} boxSize={6} color="orange.500" mb={2} />
-              <Text fontWeight="semibold">Basketball</Text>
-            </Box>
-            <Box
-              p={4}
-              borderRadius="lg"
-              border="1px"
-              borderColor="gray.200"
-              _dark={{ borderColor: "gray.700" }}
-              textAlign="center"
-              transition="all 0.2s"
-              _hover={{ transform: "translateY(-2px)", shadow: "md" }}
-            >
-              <Icon as={IoCode} boxSize={6} color="teal.500" mb={2} />
-              <Text fontWeight="semibold">Coding</Text>
-            </Box>
-            <Box
-              p={4}
-              borderRadius="lg"
-              border="1px"
-              borderColor="gray.200"
-              _dark={{ borderColor: "gray.700" }}
-              textAlign="center"
-              transition="all 0.2s"
-              _hover={{ transform: "translateY(-2px)", shadow: "md" }}
-            >
-              <Icon as={IoLaptop} boxSize={6} color="blue.500" mb={2} />
-              <Text fontWeight="semibold">Speed Typing</Text>
-              <Text fontSize="sm" color="gray.500" mt={1}>
-                Best: 130 WPM
-              </Text>
-            </Box>
-          </SimpleGrid>
-        </Section>
-        <Section delay={0.6}>
-          <Heading as="h3" variant="section-title">
-            On the web
-          </Heading>
+      <Reveal as="section" className="s" id="volunteer">
+        <h2>Volunteer Experience</h2>
+        <Timeline items={vol} />
+      </Reveal>
 
-          <List>
-            <SimpleGrid columns={2} spacingX={10}>
-              <ListItem>
-                <Link href="https://github.com/abhudaym" target="_blank">
-                  <Button
-                    variant="ghost"
-                    colorScheme="teal"
-                    leftIcon={<Icon as={IoLogoGithub} />}
-                  >
-                    @abhudaym
-                  </Button>
-                </Link>
-              </ListItem>
-              <ListItem>
-                <Link
-                  href="https://www.linkedin.com/in/abhudaym/"
-                  target="_blank"
-                >
-                  <Button
-                    variant="ghost"
-                    colorScheme="teal"
-                    leftIcon={<Icon as={IoLogoLinkedin} />}
-                  >
-                    @abhudaym
-                  </Button>
-                </Link>
-              </ListItem>
+      <Reveal as="section" className="s love" id="love">
+        <h2>I ❤</h2>
+        <div className="chips">{love.map((i) => <span className="chip" key={i.label}>{i.label}{i.note ? " · " + i.note : ""}</span>)}</div>
+      </Reveal>
 
-              <ListItem>
-                <Link
-                  href="https://www.instagram.com/abhuday.m/"
-                  target="_blank"
-                >
-                  <Button
-                    variant="ghost"
-                    colorScheme="teal"
-                    leftIcon={<Icon as={IoLogoInstagram} />}
-                  >
-                    @abhuday.m
-                  </Button>
-                </Link>
-              </ListItem>
-
-              <ListItem>
-                <Link href="https://twitter.com/MishraAbhuday" target="_blank">
-                  <Button
-                    variant="ghost"
-                    colorScheme="teal"
-                    leftIcon={<Icon as={IoLogoTwitter} />}
-                  >
-                    @MishraAbhuday
-                  </Button>
-                </Link>
-              </ListItem>
-            </SimpleGrid>
-          </List>
-        </Section>
-      </Container>
-    </Layout>
+      <Reveal as="section" className="s" id="web">
+        <h2>On the web</h2>
+        <div className="rows">
+          {socials.map((s) => (
+            <a key={s.label} href={s.href} target="_blank" rel="noreferrer" onClick={() => track("social_click", { site: s.label })}><small>{s.kind}</small>{s.label} <span className="aside">{s.handle}</span></a>
+          ))}
+        </div>
+        <p className="mail">Get in touch › <a href={"mailto:" + email} onClick={() => track("email_click", { from: "home" })}>{email}</a></p>
+      </Reveal>
+    </>
   );
 }
 
 export async function getStaticProps() {
-  const profile = await getProfile();
-  const experiences = await getExperiences();
-  const skills = await getSkills();
-
+  const [profile, experiences, skills, volunteer, sanityWorks, blogs] = await Promise.all([
+    getProfile(), getExperiences(), getSkills(), getVolunteer(), getPublishedWorks(), getPublishedBlogs(),
+  ]);
+  const works = [...sanityWorks, ...LEGACY_WORKS.filter((l) => !sanityWorks.some((w) => w.id === l.id))].slice(0, 3);
+  const feat = blogs.find((b) => b.featured) || blogs[0] || null;
   return {
     props: {
       profile: profile || null,
       experiences: experiences || [],
       skills: skills || [],
+      volunteer: volunteer || [],
+      works: works.map((w) => ({ id: w.id, title: w.title, description: w.description || "", stack: w.stack || "", thumbnail: w.thumbnail })),
+      latest: feat ? { slug: feat.slug, title: feat.title, description: feat.description, date: feat.date || null, badges: (feat.badges && feat.badges.length ? feat.badges : (enhancementFor(feat.title) || {}).badges || []) } : null,
     },
     revalidate: 60,
   };

@@ -1,80 +1,41 @@
-import { Heading, SimpleGrid, Text, Box } from "@chakra-ui/react";
-import Section from "../components/section";
-import { WorkGridItem, GridItemStyle } from "../components/grid-item";
-import thumbInkdrop from "../public/images/works/prefab_01.jpg";
-import thumbeproshop from "../public/images/works/eproshop_01.jpg";
-import thumbLinkedhub from "../public/images/works/linkedhub_01.jpg";
-import thumbcovid from "../public/images/works/covidTracker_01.jpg";
-import Layout from "../components/layouts/article";
-
+import Head from "next/head";
+import Spot from "../components/Spot";
+import Reveal from "../components/Reveal";
 import { getPublishedWorks } from "../lib/sanity";
+import { LEGACY_WORKS } from "../lib/legacyWorks";
 
 export async function getStaticProps() {
-  const mdWorks = await getPublishedWorks();
-
-  return {
-    props: { mdWorks },
-    revalidate: 10,
-  };
+  const sanity = await getPublishedWorks();
+  const works = [
+    ...sanity.map((w) => ({ id: w.id, title: w.title, description: w.description, year: w.date ? String(w.date).slice(0, 4) : "", stack: w.stack || "", thumbnail: w.thumbnail })),
+    ...LEGACY_WORKS.filter((l) => !sanity.some((w) => w.id === l.id)).map((l) => ({ id: l.id, title: l.title, description: l.description, year: l.year, stack: l.stack, thumbnail: l.thumbnail })),
+  ];
+  return { props: { works }, revalidate: 60 };
 }
 
-const Works = ({ mdWorks }) => {
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
+export default function Works({ works }) {
   return (
-    <Layout>
-      <Heading as="h3" fontSize={20} mb={4} mt={0}>
-        Works
-      </Heading>
-
-      <SimpleGrid columns={[1, 1, 2]} gap={6}>
-        {mdWorks &&
-          mdWorks.map((item) => (
-            <Section key={item.id}>
-              <WorkGridItem id={item.id} title={item.title} thumbnail={item.thumbnail}>
-                <Box>
-                  <Text fontSize={14}>{item.description}</Text>
-                  {item.date && (
-                    <Text fontSize={12} color="gray.500" fontStyle="italic" mt={1}>
-                      {formatDate(item.date)}
-                    </Text>
-                  )}
-                </Box>
-              </WorkGridItem>
-            </Section>
-          ))}
-
-        <Section>
-          <WorkGridItem id="eproshop" title="eProShop" thumbnail={thumbeproshop}>
-            An eCommerce web-application built using MERN Stack.
-          </WorkGridItem>
-        </Section>
-        <Section>
-          <WorkGridItem id="prefabmart" title="PrefabMart" thumbnail={thumbInkdrop}>
-            World&apos;s first online Prefabricated structure selling platform
-          </WorkGridItem>
-        </Section>
-        <Section>
-          <WorkGridItem id="linkedhub" title="LinkedHub" thumbnail={thumbLinkedhub}>
-            A social networking site for developers created using MERN Stack.
-          </WorkGridItem>
-        </Section>
-        <Section>
-          <WorkGridItem id="covidTracker" title="Covid Tracker" thumbnail={thumbcovid}>
-            Coronavirus tracker for each country and each state in India built using ReactJS.
-          </WorkGridItem>
-        </Section>
-      </SimpleGrid>
-      <GridItemStyle />
-    </Layout>
+    <div className="wrap">
+      <Head><title>Works - Abhuday Mishra</title></Head>
+      <div className="bh">
+        <div className="k">Works · case files</div>
+        <h1>Things I&apos;ve built.</h1>
+        <p>From college side projects to production pipelines. Hover a card.</p>
+      </div>
+      <div className="works-grid" style={{ marginTop: 34 }}>
+        {works.map((w) => (
+          <Reveal key={w.id}>
+            <Spot href={"/works/" + w.id}>
+              <div className="thumb" style={{ backgroundImage: `url(${w.thumbnail})` }} />
+              <div className="body">
+                <div className="tagrow">{w.year && <span className="tag">{w.year}</span>}{w.stack && w.stack.split(",").slice(0, 2).map((s) => <span className="tag" key={s}>{s.trim()}</span>)}</div>
+                <h3>{w.title}</h3>
+                <p>{w.description}</p>
+              </div>
+            </Spot>
+          </Reveal>
+        ))}
+      </div>
+    </div>
   );
-};
-export default Works;
+}

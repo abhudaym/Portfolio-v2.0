@@ -1,66 +1,74 @@
-import { Heading, SimpleGrid, Text, Box } from "@chakra-ui/react";
-import Section from "../components/section";
-import { BlogGridItem, GridItemStyle } from "../components/grid-item";
-import Layout from "../components/layouts/article";
-import { getPublishedBlogs } from '../lib/sanity';
+import { useMemo, useState } from "react";
+import Head from "next/head";
+import NextLink from "next/link";
+import Reveal from "../components/Reveal";
+import RcaDemo from "../components/demos/RcaDemo";
+import { track } from "../components/Spot";
+import { getPublishedBlogs } from "../lib/sanity";
+import { enhancementFor } from "../lib/enhancements";
 
 export async function getStaticProps() {
-  const blogs = await getPublishedBlogs();
-
-  return { 
-    props: { blogs },
-    revalidate: 60 // Revalidate every 60 seconds for ISR
-  };
+  const blogs = (await getPublishedBlogs()).map((b) => {
+    const e = enhancementFor(b.title) || {};
+    return {
+      ...b,
+      tags: b.tags && b.tags.length ? b.tags : e.tags || [],
+      badges: b.badges && b.badges.length ? b.badges : e.badges || [],
+      stats: b.stats && b.stats.length ? b.stats : e.stats || [],
+    };
+  });
+  return { props: { blogs }, revalidate: 60 };
 }
 
-const Blogs = ({ blogs }) => {
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
+const fmt = (d) => (d ? new Date(d).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : "");
+
+export default function Blogs({ blogs }) {
+  const [tag, setTag] = useState(null);
+  const tags = useMemo(() => [...new Set(blogs.flatMap((b) => b.tags))], [blogs]);
+  const list = blogs.filter((b) => !tag || b.tags.includes(tag));
+  const hasDemo = blogs.some((b) => /rca/i.test(b.title));
 
   return (
-    <Layout>
-      <Heading as="h3" fontSize={20} mb={4} mt={0}>
-        Blogs
-      </Heading>
+    <div className="wrap">
+      <Head><title>Blogs - Abhuday Mishra</title></Head>
+      <div className="bh">
+        <div className="k" style={{ color: "var(--pink)" }}>Blogs · incident reports</div>
+        <h1>Notes from production.</h1>
+        <p>Evaluation, failure modes, and what I&apos;d do differently. Filed like postmortems.</p>
+      </div>
 
-      {blogs.length === 0 ? (
-        <Section>
-          <Text>No blog posts found. Add some markdown files to the content/blogs directory!</Text>
-        </Section>
-      ) : (
-        <SimpleGrid columns={1} gap={6}>
-          {blogs.map((blog) => (
-            <Section key={blog.id}>
-              <BlogGridItem
-                id={blog.slug}
-                title={blog.title}
-                thumbnail={blog.thumbnail}
-              >
-                <Box>
-                  <Text fontSize={14} mb={2}>
-                    {blog.description}
-                  </Text>
-                  {blog.date && (
-                    <Text fontSize={12} color="gray.500" fontStyle="italic">
-                      Published on {formatDate(blog.date)}
-                    </Text>
-                  )}
-                </Box>
-              </BlogGridItem>
-            </Section>
-          ))}
-        </SimpleGrid>
-      )}
-      <GridItemStyle />
-    </Layout>
+      {hasDemo && <RcaDemo />}
+
+      <div className="filters">
+        <span className="sec-h">Reports · {blogs.length} filed</span>
+        {tags.length > 0 && <button type="button" aria-pressed={!tag} onClick={() => setTag(null)}>All</button>}
+        {tags.map((t) => <button key={t} type="button" aria-pressed={tag === t} onClick={() => setTag(tag === t ? null : t)}>{t}</button>)}
+      </div>
+
+      {blogs.length === 0 && <div className="slot">No reports yet. Publish one in Sanity and it shows up here within a minute.</div>}
+
+      <div className="reports">
+        {list.map((b) => (
+          <Reveal key={b.id}>
+            <NextLink href={"/blogs/" + b.slug} className="report" onPointerMove={track}>
+              <div className="tagrow">
+                <span className="tag ok">Resolved</span>
+                {b.date && <span className="tag">{fmt(b.date)}</span>}
+                {b.readTime && <span className="tag">{b.readTime} min</span>}
+                {b.badges.map((x) => <span key={x.label} className={"tag " + (x.kind || "win")}>{x.label}</span>)}
+              </div>
+              <h3>{b.title}</h3>
+              <p>{b.description}</p>
+              {b.stats.length > 0 && (
+                <div className="mets">{b.stats.slice(0, 3).map((s) => <div key={s.label}><b>{s.to != null ? s.to + (s.suf || "") : s.text}</b>{s.label}</div>)}</div>
+              )}
+              {b.tags.length > 0 && <div className="tagrow" style={{ marginBottom: 14 }}>{b.tags.map((t) => <span key={t} className="tag">{t}</span>)}</div>}
+              <span className="go">Read the report →</span>
+            </NextLink>
+          </Reveal>
+        ))}
+      </div>
+      <div className="slot" style={{ marginTop: 14 }}>next incident: not filed yet</div>
+    </div>
   );
-};
-
-export default Blogs; 
+}
