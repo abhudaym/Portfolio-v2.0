@@ -3,13 +3,12 @@ import NextLink from "next/link";
 import Markdown from "../../components/Markdown";
 import Figure, { Facts } from "../../components/Figure";
 import { getPublishedWorks, getWorkBySlug } from "../../lib/sanity";
-import { LEGACY_WORKS } from "../../lib/legacyWorks";
 import { CASE_STUDIES, caseStudy } from "../../lib/caseStudies";
 import { track } from "../../lib/track";
 
 export async function getStaticPaths() {
   const works = await getPublishedWorks();
-  const ids = new Set([...CASE_STUDIES.map((c) => c.id), ...works.map((w) => String(w.id)), ...LEGACY_WORKS.map((l) => l.id)]);
+  const ids = new Set([...CASE_STUDIES.map((c) => c.id), ...works.map((w) => String(w.id))]);
   return { paths: [...ids].map((id) => ({ params: { id } })), fallback: "blocking" };
 }
 
@@ -17,10 +16,8 @@ export async function getStaticProps({ params }) {
   const cs = caseStudy(params.id);
   if (cs) return { props: { cs }, revalidate: 60 };
   const data = await getWorkBySlug(params.id);
-  if (data) return { props: { work: { ...data.frontMatter, content: data.content || "", images: [] } }, revalidate: 60 };
-  const l = LEGACY_WORKS.find((x) => x.id === params.id);
-  if (!l) return { notFound: true };
-  return { props: { work: { title: l.title, description: l.description, date: l.year, platform: l.platform, stack: l.stack, website: l.website, source: l.source, thumbnail: null, content: l.body, images: l.images } }, revalidate: 60 };
+  if (!data) return { notFound: true };
+  return { props: { work: { ...data.frontMatter, content: data.content || "" } }, revalidate: 60 };
 }
 
 const fmt = (d) => (/^\d{4}$/.test(String(d)) ? d : d ? new Date(d).toLocaleDateString("en-GB", { month: "short", year: "numeric" }) : "");
@@ -77,7 +74,6 @@ export default function Work({ work, cs }) {
           {work.description && <p className="sub">{work.description}</p>}
           {work.thumbnail && !work.content && <img src={work.thumbnail} alt={work.title} style={{ width: "100%", border: "1px solid var(--rule)" }} />}
           {work.content && <Markdown playbackRate={2}>{work.content}</Markdown>}
-          {work.images.length > 0 && <div className="shots">{work.images.map((src) => <img key={src} src={src} alt={work.title} loading="lazy" />)}</div>}
           <Back />
         </div>
         {facts.length > 0 && <Facts items={facts} />}

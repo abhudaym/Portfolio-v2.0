@@ -53,7 +53,7 @@ export default function Home({ experiences, posts }) {
             </div>
           ))}
         </div>
-        <NextLink href="/works" className="more" style={{ marginTop: -16 }}>All work, including the old side projects →</NextLink>
+        <NextLink href="/works" className="more" style={{ marginTop: -16 }}>All work →</NextLink>
       </Sec>
 
       {posts.length > 0 && (

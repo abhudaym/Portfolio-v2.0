@@ -108,8 +108,6 @@ main { display: flex; flex-direction: column; gap: 64px; }
 .code button { font: inherit; color: var(--grey); background: none; border: 0; padding: 8px 0 8px 12px; cursor: pointer; text-decoration: underline; }
 .code button:hover { color: var(--accent); }
 .code pre { margin: 0; padding: 6px 0 14px; overflow-x: auto; font-family: var(--mono); font-size: 14px; line-height: 1.55; }
-.shots { display: grid; gap: 16px; }
-.shots img { width: 100%; height: auto; border: 1px solid var(--rule); display: block; }
 .toc { display: none; flex-direction: column; gap: 6px; }
 .toc a { text-decoration: none; color: var(--grey); }
 .toc a:hover, .toc a.on { color: var(--ink); text-decoration: underline; }

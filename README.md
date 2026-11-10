@@ -11,7 +11,6 @@ A typeset-paper look: one serif (EB Garamond) for text, one mono (IBM Plex Mono)
 - **Production case studies** (CRIS 2.0, WMP Copilot, data archival, Lambda ingestion): `lib/caseStudies.js`. They render on the home page, `/works` and `/works/<id>`.
 - **Home page copy, education, contact links**: `lib/site.js`.
 - **Sanity**: blog posts, side-project works, experience and the resume PDF. `lib/site.js` has an experience fallback.
-- **Old side projects**: `lib/legacyWorks.js`.
 - `lib/enhancements.js` gives posts their stats and badges until those fields are filled in Sanity.
 - `/type` is the typing test, linked from the footer.
 
