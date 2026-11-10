@@ -3,14 +3,13 @@ import Head from "next/head";
 
 export default function NotFound() {
   return (
-    <div className="wrap">
+    <>
       <Head><title>404 - Abhuday Mishra</title></Head>
-      <div className="bh" style={{ paddingTop: 96 }}>
-        <div className="k" style={{ color: "var(--red)" }}>Error 404 · record dropped</div>
-        <h1>This page failed validation.</h1>
-        <p>It never made it past the second stage. Press <b>/</b> to search, or go back to where the data is still flowing.</p>
-        <p style={{ marginTop: 22 }}><NextLink href="/" className="btn">Return to home</NextLink></p>
-      </div>
-    </div>
+      <header className="col" style={{ padding: "48px 0" }}>
+        <p className="mono grey">404</p>
+        <h1 className="title">There is no page here.</h1>
+        <p className="sub">The link may be old. <NextLink href="/">Go back to the front page</NextLink>.</p>
+      </header>
+    </>
   );
 }

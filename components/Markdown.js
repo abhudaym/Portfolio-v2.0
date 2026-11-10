@@ -3,7 +3,6 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import { slugify } from "../lib/md";
-import { DEMOS } from "./demos";
 import Flow from "./Flow";
 
 const text = (c) => (Array.isArray(c) ? c.map(text).join("") : typeof c === "object" && c ? text(c.props && c.props.children) : String(c ?? ""));
@@ -21,7 +20,7 @@ function Code({ lang, code }) {
   };
   return (
     <div className="code">
-      <div className="bar2"><span>{lang || "code"}</span><button type="button" onClick={copy}>{done ? "Copied" : "Copy"}</button></div>
+      <div className="bar"><span>{lang || "code"}</span><button type="button" onClick={copy}>{done ? "Copied" : "Copy"}</button></div>
       <pre><code>{code}</code></pre>
     </div>
   );
@@ -36,17 +35,13 @@ export default function Markdown({ children, playbackRate }) {
         components={{
           h2: Heading("h2"),
           h3: Heading("h3"),
-          pre: ({ node, children: ch }) => {
+          pre: ({ children: ch }) => {
             const el = Array.isArray(ch) ? ch[0] : ch;
             const cls = (el && el.props && el.props.className) || "";
             const lang = (/language-([\w-]+)/.exec(cls) || [])[1];
             const raw = text(el && el.props && el.props.children).replace(/\n$/, "");
             if (lang === "flow") return <Flow source={raw} />;
-            if (lang === "demo") {
-              const meta = node && node.children && node.children[0] && node.children[0].data && node.children[0].data.meta;
-              const D = DEMOS[(meta || raw).trim()];
-              return D ? <D /> : null;
-            }
+            if (lang === "demo") return null; // interactive demos were removed with the redesign
             return <Code lang={lang} code={raw} />;
           },
           video: ({ node, ...p }) => (
