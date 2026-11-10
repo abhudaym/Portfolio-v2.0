@@ -1,25 +1,21 @@
 # Portfolio v2
 
-Next.js (pages router) + Sanity. Everything on the site is content from Sanity with built-in fallbacks in `lib/site.js`, so nothing breaks while a field is still empty.
+Next.js (pages router) + Sanity. Writing and side projects come from Sanity; the rest is in `lib/`.
 
-## What's in it
+## Design
 
-- **Living pipeline hero** (`components/PipelineHero.js`): a canvas of two data pipelines (CRIS 2.0 and WMP Copilot). Hover a stage, click empty space for a traffic spike, type the sentence to send your own records through.
-- **Command palette** (`⌘K` / `Ctrl+K` / `/`): jump to pages, posts and works (fed by `/api/search`), toggle theme, copy email.
-- **Reports, not blog posts** (`pages/blogs*`): tag filters, headline-number tiles, reading progress, table of contents, copy-able code blocks.
-- **Interactive blocks inside Sanity markdown**: write a code block with language `demo` and a single line with the demo name. Available: `rca`, `arch-mcp`, `pick-source`, `before-after`. Add new ones in `components/demos/`.
-- **Scroll-drawn timelines**, cursor-spotlight cards, light/dark themes without flash.
+A typeset-paper look: one serif (EB Garamond) for text, one mono (IBM Plex Mono) for dates and numbers, rules instead of cards, a single accent colour. Dark mode follows the system setting. All of it lives in `styles/globals.css`.
 
-## Sanity fields added
+## Where content lives
 
-Redeploy the studio (`cd studio && npx sanity deploy`) to get them:
+- **Production case studies** (CRIS 2.0, WMP Copilot, data archival, Lambda ingestion): `lib/caseStudies.js`. They render on the home page, `/works` and `/works/<id>`.
+- **Home page copy, education, contact links**: `lib/site.js`.
+- **Sanity**: blog posts, side-project works, experience and the resume PDF. `lib/site.js` has an experience fallback.
+- **Old side projects**: `lib/legacyWorks.js`.
+- `lib/enhancements.js` gives posts their stats and badges until those fields are filled in Sanity.
+- `/type` is the typing test, linked from the footer.
 
-- `profile`: kicker, tagline, now, email, typingChallenge, bestWpm, heroRate, heroLines, interests, socials
-- `blog`: tags, readTime, featured, badges, stats (animated number tiles)
-- `experience`: location, current, highlights
-- new `volunteer` document type
-
-`lib/enhancements.js` is a small bridge that gives the existing RCA post its stats, tags, badge and demos until those fields are filled in Sanity.
+Sanity `profile` fields from the old design (kicker, tagline, now, typingChallenge, heroRate, heroLines, interests, socials), the `skill` and `volunteer` types and `blog.tags` are no longer read by the site. Only `profile.resume` is.
 
 ## Develop
 
@@ -34,11 +30,11 @@ No access to Sanity (CI, offline)? `SANITY_OFFLINE=1 npm run build` uses `conten
 
 Page views per page come from Vercel Web Analytics (already wired in `_app.js`). Custom events go through `lib/track.js`:
 
-`resume_open`, `resume_download`, `social_click` (site), `email_click`, `typing_test_start`, `typing_test_done` (wpm, accuracy), `rca_demo_run`, `palette_open`, `palette_go` (to), `sudo_hire`, `work_link` (work, kind), `post_read_50` / `post_read_90` (post).
+`resume_open`, `resume_download`, `social_click` (site), `email_click`, `typing_done` (wpm), `work_link` (work, kind), `post_read_50` / `post_read_90` (post).
 
 See them in Vercel → your project → Analytics → Events. Custom events need a Pro plan; page views work on the free plan.
 
-## Animated flow diagrams in posts
+## Flow diagrams in posts
 
 Write a code block with language `flow` in Sanity markdown:
 
@@ -47,4 +43,4 @@ Write a code block with language `flow` in Sanity markdown:
     Documents -> Parser (turns PDFs into text) -> Chunker -> Embedder -> Vector store
     ```
 
-A line with `->` is a row of steps, a line without one titles the next row, and `(text)` after a step becomes a note shown on hover or tap. Rows animate when scrolled into view and stack vertically on phones.
+A line with `->` is a row of steps, a line without one titles the next row, and `(text)` after a step becomes a note printed under the row.

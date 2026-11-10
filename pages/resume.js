@@ -9,16 +9,16 @@ export async function getStaticProps() {
 
 export default function Resume({ pdfUrl }) {
   return (
-    <div className="wrap" style={{ maxWidth: 900 }}>
-      <Head><title>Resume - Abhuday Mishra</title></Head>
-      <div className="bh" style={{ display: "flex", justifyContent: "space-between", alignItems: "end", gap: 12, flexWrap: "wrap" }}>
-        <div><div className="k">Resume</div><h1 style={{ margin: "8px 0 0" }}>The short version.</h1></div>
-        <div className="tagrow">
-          <a className="btn ghost" href={pdfUrl} target="_blank" rel="noreferrer" onClick={() => track("resume_open")}>Open PDF</a>
-          <a className="btn" href={pdfUrl} download="Abhuday_Mishra_Resume.pdf" onClick={() => track("resume_download")}>Download PDF</a>
-        </div>
-      </div>
-      <div className="pdf" style={{ marginTop: 28 }}><iframe src={pdfUrl} title="Resume PDF" /></div>
-    </div>
+    <>
+      <Head><title>Résumé - Abhuday Mishra</title></Head>
+      <header className="col">
+        <h1 className="title">Résumé</h1>
+        <p className="sub">
+          One page. <a href={pdfUrl} download="Abhuday_Mishra_Resume.pdf" onClick={() => track("resume_download")}>Download the PDF</a> or{" "}
+          <a href={pdfUrl} target="_blank" rel="noreferrer" onClick={() => track("resume_open")}>open it in a new tab</a>.
+        </p>
+      </header>
+      <div className="pdf"><iframe src={pdfUrl} title="Résumé PDF" /></div>
+    </>
   );
 }

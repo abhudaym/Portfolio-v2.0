@@ -1,120 +1,99 @@
 import Head from "next/head";
-import Markdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
-import remarkGfm from "remark-gfm";
 import NextLink from "next/link";
-import PipelineHero from "../components/PipelineHero";
-import Reveal from "../components/Reveal";
-import Timeline from "../components/Timeline";
-import Spot from "../components/Spot";
-import { getProfile, getExperiences, getSkills, getVolunteer, getPublishedWorks, getPublishedBlogs } from "../lib/sanity";
-import { SITE, ABOUT, EXPERIENCE, VOLUNTEER, SKILLS, INTERESTS, SOCIALS } from "../lib/site";
-import { LEGACY_WORKS } from "../lib/legacyWorks";
+import Figure, { Facts } from "../components/Figure";
+import { getExperiences, getPublishedBlogs } from "../lib/sanity";
+import { SITE, EXPERIENCE, EDUCATION, prettyPeriod, fmtDate } from "../lib/site";
+import { CASE_STUDIES } from "../lib/caseStudies";
 import { enhancementFor } from "../lib/enhancements";
-import { track } from "../lib/track";
 
-export default function Home({ profile, experiences, skills, volunteer, works, latest }) {
-  const p = profile || {};
-  const exp = experiences && experiences.length ? experiences : EXPERIENCE;
-  const vol = volunteer && volunteer.length ? volunteer : VOLUNTEER;
-  const sk = skills && skills.length ? skills : SKILLS;
-  const love = p.interests && p.interests.length ? p.interests : INTERESTS;
-  const socials = p.socials && p.socials.length ? p.socials : SOCIALS;
-  const email = p.email || SITE.email;
-  const target = p.typingChallenge || SITE.typingChallenge;
+const Sec = ({ n, title, id, children }) => (
+  <section className="sec" id={id}>
+    <h2><span className="accent">§{n}</span>&ensp;{title}</h2>
+    {children}
+  </section>
+);
+
+export default function Home({ experiences, posts }) {
+  const exp = experiences.length ? experiences : EXPERIENCE;
+  const featured = CASE_STUDIES.filter((c) => c.featured);
+  const rest = CASE_STUDIES.filter((c) => !c.featured);
 
   return (
     <>
       <Head><title>{SITE.name}</title></Head>
-      <PipelineHero
-        kicker={p.kicker || SITE.kicker}
-        name={SITE.name}
-        tagline={p.tagline || SITE.tagline}
-        now={p.now || SITE.now}
-        target={target}
-        bestWpm={p.bestWpm || SITE.bestWpm}
-        rate={p.heroRate || SITE.heroRate}
-        lines={p.heroLines && p.heroLines.length ? p.heroLines : SITE.heroLines}
-      />
 
-      <Reveal as="section" className="s" id="work">
-        <h2>Work</h2>
-        {p.about ? (
-          <Markdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]}>{p.about}</Markdown>
-        ) : (
-          ABOUT.map((t, i) => <p key={i}>{t}</p>)
-        )}
-        <div className="work-teasers">
-          {works.map((w) => (
-            <Spot key={w.id} href={"/works/" + w.id}>
-              <div className="thumb" style={{ backgroundImage: `url(${w.thumbnail})` }} />
-              <div className="body"><span className="tag">{w.stack ? w.stack.split(",")[0] : "project"}</span><h3>{w.title}</h3><p>{w.description}</p></div>
-            </Spot>
+      <section className="row">
+        <div className="col" style={{ gap: 24 }}>
+          <h1 className="lede">{SITE.tagline}</h1>
+          <p>{SITE.intro}</p>
+        </div>
+        <aside className="margin grey">
+          <p><span className="sc accent">Now</span><br />{SITE.now}</p>
+        </aside>
+      </section>
+
+      <Sec n={1} title="Selected work" id="work">
+        {featured.map((c, i) => (
+          <article className="row work" key={c.id}>
+            <div className="col">
+              <h3><NextLink href={"/works/" + c.id}>{c.title} <i>{c.kind}</i></NextLink></h3>
+              <p>{c.summary}</p>
+              <Figure n={i + 1} steps={c.steps} caption={c.caption} />
+              <NextLink href={"/works/" + c.id} className="more">Read the case study →</NextLink>
+            </div>
+            <Facts items={c.facts} />
+          </article>
+        ))}
+        <div className="list">
+          {rest.map((c) => (
+            <div className="entry" key={c.id}>
+              <span className="d">{c.period}</span>
+              <span className="t"><NextLink href={"/works/" + c.id}>{c.title}</NextLink></span>
+              <span className="n">{c.facts[0].k}: {c.facts[0].v}</span>
+            </div>
           ))}
         </div>
-        <p style={{ marginTop: 18 }}><NextLink href="/works" className="go mono">All works →</NextLink></p>
-      </Reveal>
+        <NextLink href="/works" className="more" style={{ marginTop: -16 }}>All work, including the old side projects →</NextLink>
+      </Sec>
 
-      {latest && (
-        <Reveal as="section" className="s" id="latest">
-          <h2>Latest report</h2>
-          <NextLink href={"/blogs/" + latest.slug} className="report" onPointerMove={(e) => { const r = e.currentTarget.getBoundingClientRect(); e.currentTarget.style.setProperty("--mx", e.clientX - r.left + "px"); e.currentTarget.style.setProperty("--my", e.clientY - r.top + "px"); }}>
-            <div className="tagrow">{latest.date && <span className="tag">{new Date(latest.date).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</span>}{(latest.badges || []).map((b) => <span key={b.label} className={"tag " + (b.kind || "win")}>{b.label}</span>)}</div>
-            <h3>{latest.title}</h3>
-            <p>{latest.description}</p>
-            <span className="go">Read the report →</span>
-          </NextLink>
-        </Reveal>
+      {posts.length > 0 && (
+        <Sec n={2} title="Writing" id="writing">
+          <div className="list">
+            {posts.map((b) => (
+              <div className="entry" key={b.slug}>
+                <span className="d">{fmtDate(b.date)}</span>
+                <span className="t"><NextLink href={"/blogs/" + b.slug}>{b.title}</NextLink></span>
+                <span className="n">{b.note}</span>
+              </div>
+            ))}
+          </div>
+        </Sec>
       )}
 
-      <Reveal as="section" className="s" id="experience">
-        <h2>Experience</h2>
-        <Timeline items={exp} />
-      </Reveal>
-
-      <Reveal as="section" className="s" id="skills">
-        <h2>Skills</h2>
-        <div className="chips">{sk.map((s) => <span className="chip" key={s._id}>{s.name}</span>)}</div>
-      </Reveal>
-
-      <Reveal as="section" className="s" id="volunteer">
-        <h2>Volunteer Experience</h2>
-        <Timeline items={vol} />
-      </Reveal>
-
-      <Reveal as="section" className="s love" id="love">
-        <h2>I ❤</h2>
-        <div className="chips">{love.map((i) => <span className="chip" key={i.label}>{i.label}{i.note ? " · " + i.note : ""}</span>)}</div>
-      </Reveal>
-
-      <Reveal as="section" className="s" id="web">
-        <h2>On the web</h2>
-        <div className="rows">
-          {socials.map((s) => (
-            <a key={s.label} href={s.href} target="_blank" rel="noreferrer" onClick={() => track("social_click", { site: s.label })}><small>{s.kind}</small>{s.label} <span className="aside">{s.handle}</span></a>
+      <Sec n={posts.length > 0 ? 3 : 2} title="Record" id="record">
+        <div className="list plain">
+          {exp.map((e) => (
+            <div className="entry two" key={e._id}>
+              <span className="d">{prettyPeriod(e.period)}</span>
+              <span className="t">{e.role}, {e.companyUrl ? <a href={e.companyUrl} target="_blank" rel="noreferrer">{e.company}</a> : e.company}</span>
+            </div>
           ))}
+          <div className="entry two">
+            <span className="d">{prettyPeriod(EDUCATION.period)}</span>
+            <span className="t">{EDUCATION.what}, {EDUCATION.where}<small>{EDUCATION.note}</small></span>
+          </div>
         </div>
-        <p className="mail">Get in touch › <a href={"mailto:" + email} onClick={() => track("email_click", { from: "home" })}>{email}</a></p>
-      </Reveal>
+        <p className="measure grey" style={{ marginTop: -12 }}>{SITE.tools}</p>
+      </Sec>
     </>
   );
 }
 
 export async function getStaticProps() {
-  const [profile, experiences, skills, volunteer, sanityWorks, blogs] = await Promise.all([
-    getProfile(), getExperiences(), getSkills(), getVolunteer(), getPublishedWorks(), getPublishedBlogs(),
-  ]);
-  const works = [...sanityWorks, ...LEGACY_WORKS.filter((l) => !sanityWorks.some((w) => w.id === l.id))].slice(0, 3);
-  const feat = blogs.find((b) => b.featured) || blogs[0] || null;
-  return {
-    props: {
-      profile: profile || null,
-      experiences: experiences || [],
-      skills: skills || [],
-      volunteer: volunteer || [],
-      works: works.map((w) => ({ id: w.id, title: w.title, description: w.description || "", stack: w.stack || "", thumbnail: w.thumbnail })),
-      latest: feat ? { slug: feat.slug, title: feat.title, description: feat.description, date: feat.date || null, badges: (feat.badges && feat.badges.length ? feat.badges : (enhancementFor(feat.title) || {}).badges || []) } : null,
-    },
-    revalidate: 60,
-  };
+  const [experiences, blogs] = await Promise.all([getExperiences(), getPublishedBlogs()]);
+  const posts = blogs.slice(0, 5).map((b) => {
+    const badges = b.badges && b.badges.length ? b.badges : (enhancementFor(b.title) || {}).badges || [];
+    return { slug: b.slug, title: b.title, date: b.date || null, note: badges.map((x) => x.label).join(", ") };
+  });
+  return { props: { experiences: experiences || [], posts }, revalidate: 60 };
 }
