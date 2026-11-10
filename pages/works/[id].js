@@ -2,6 +2,7 @@ import Head from "next/head";
 import NextLink from "next/link";
 import Markdown from "../../components/Markdown";
 import Figure, { Facts } from "../../components/Figure";
+import Diagram from "../../components/Diagram";
 import { getPublishedWorks, getWorkBySlug } from "../../lib/sanity";
 import { CASE_STUDIES, caseStudy } from "../../lib/caseStudies";
 import { track } from "../../lib/track";
@@ -33,11 +34,21 @@ function CaseStudy({ cs }) {
           <h1 className="title">{cs.title} <i style={{ fontWeight: 400, display: "block" }}>{cs.kind}</i></h1>
           <p className="sub">{cs.summary}</p>
           {cs.steps && <Figure n={1} steps={cs.steps} caption={cs.caption} />}
+          {cs.diagram && <Diagram n={1} {...cs.diagram} />}
           <div className="md">
             {cs.sections.map((s) => (
               <section key={s.h} className="md">
                 <h2>{s.h}</h2>
-                {s.p.map((t, i) => <p key={i}>{t}</p>)}
+                {(s.p || []).map((t, i) => <p key={i}>{t}</p>)}
+                {s.table && (
+                  <div className="tablewrap">
+                    <table>
+                      <thead><tr>{s.table.head.map((h, i) => <th key={i} scope="col">{h}</th>)}</tr></thead>
+                      <tbody>{s.table.rows.map((r) => <tr key={r[0]}>{r.map((c, i) => <td key={i}>{c}</td>)}</tr>)}</tbody>
+                    </table>
+                  </div>
+                )}
+                {(s.after || []).map((t, i) => <p key={"a" + i}>{t}</p>)}
               </section>
             ))}
             {cs.related && (
