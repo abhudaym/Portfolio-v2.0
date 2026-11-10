@@ -65,7 +65,7 @@ export default function Post({ fm, content, toc }) {
         {fm.image && <meta property="og:image" content={fm.image} />}
       </Head>
       <header className="col">
-        <NextLink href="/blogs" className="back">← All writing</NextLink>
+        <NextLink href="/blogs" className="back">{"<-"} All writing</NextLink>
         <p className="mono grey" style={{ maxWidth: "none" }}>{meta}</p>
         <h1 className="title" style={{ maxWidth: "22em" }}>{fm.title}</h1>
         {fm.description && <p className="sub">{fm.description}</p>}
@@ -91,7 +91,7 @@ export default function Post({ fm, content, toc }) {
         <article className="col" style={{ gap: 28 }}>
           {fm.image && <img src={fm.image} alt="" style={{ width: "100%", border: "1px solid var(--rule)" }} />}
           {body}
-          <NextLink href="/blogs" className="back">← All writing</NextLink>
+          <NextLink href="/blogs" className="back">{"<-"} All writing</NextLink>
         </article>
       </div>
     </>

@@ -23,9 +23,16 @@ export default function Home({ experiences, posts }) {
       <Head><title>{SITE.name}</title></Head>
 
       <section className="row">
-        <div className="col" style={{ gap: 24 }}>
-          <h1 className="lede">{SITE.tagline}</h1>
-          <p>{SITE.intro}</p>
+        <div className="col letter">
+          <h1 className="lede">Hello,</h1>
+          <p>
+            I build data pipelines and RAG systems for power utilities at AiDash. One ingests 320k+ records an hour. Another answers
+            questions for 100+ tenants. I write about <s>everything</s> what breaks in between.
+          </p>
+          <p>
+            This page was typed at {SITE.bestWpm} WPM with <s>no</s> few mistakes. <NextLink href="/type">Race me</NextLink>
+            <span className="caret" aria-hidden="true" />
+          </p>
         </div>
         <aside className="margin grey">
           <p><span className="sc accent">Now</span><br />{SITE.now}</p>
@@ -39,7 +46,7 @@ export default function Home({ experiences, posts }) {
               <h3><NextLink href={"/works/" + c.id}>{c.title} <i>{c.kind}</i></NextLink></h3>
               <p>{c.summary}</p>
               <Figure n={i + 1} steps={c.steps} caption={c.caption} />
-              <NextLink href={"/works/" + c.id} className="more">Read the case study →</NextLink>
+              <NextLink href={"/works/" + c.id} className="more">Read the case study {"->"}</NextLink>
             </div>
             <Facts items={c.facts} />
           </article>
@@ -53,7 +60,7 @@ export default function Home({ experiences, posts }) {
             </div>
           ))}
         </div>
-        <NextLink href="/works" className="more" style={{ marginTop: -16 }}>All work, including the old side projects →</NextLink>
+        <NextLink href="/works" className="more" style={{ marginTop: -16 }}>All work, including the old side projects {"->"}</NextLink>
       </Sec>
 
       {posts.length > 0 && (

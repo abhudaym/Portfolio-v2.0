@@ -4,7 +4,7 @@ Next.js (pages router) + Sanity. Writing and side projects come from Sanity; the
 
 ## Design
 
-A typeset-paper look: one serif (EB Garamond) for text, one mono (IBM Plex Mono) for dates and numbers, rules instead of cards, a single accent colour. Dark mode follows the system setting. All of it lives in `styles/globals.css`.
+A typewritten look: Courier Prime at close to one size, bold and capitals for headings, dashed rules, struck-through corrections, one red-ribbon accent. Dark mode follows the system setting. All of it lives in `styles/globals.css`.
 
 ## Where content lives
 

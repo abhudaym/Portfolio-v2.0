@@ -28,7 +28,7 @@ export default function Shell({ children }) {
       <main>{children}</main>
       <footer className="colophon">
         <p className="measure">
-          {SITE.offClock} I also type at {SITE.bestWpm} WPM. <NextLink href="/type">Think you&apos;re faster?</NextLink>
+          {SITE.offClock} <NextLink href="/type">Typing test</NextLink>, if you think you&apos;re faster.
         </p>
         <nav aria-label="Contact">
           <a href={"mailto:" + SITE.email} onClick={() => track("email_click")}>{SITE.email}</a>

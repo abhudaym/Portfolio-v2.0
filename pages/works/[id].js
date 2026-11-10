@@ -24,7 +24,7 @@ export async function getStaticProps({ params }) {
 }
 
 const fmt = (d) => (/^\d{4}$/.test(String(d)) ? d : d ? new Date(d).toLocaleDateString("en-GB", { month: "short", year: "numeric" }) : "");
-const Back = () => <NextLink href="/works" className="back">← All work</NextLink>;
+const Back = () => <NextLink href="/works" className="back">{"<-"} All work</NextLink>;
 
 function CaseStudy({ cs }) {
   return (
