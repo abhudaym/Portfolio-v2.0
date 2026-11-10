@@ -33,8 +33,7 @@ function CaseStudy({ cs }) {
           <Back />
           <h1 className="title">{cs.title} <i style={{ fontWeight: 400, display: "block" }}>{cs.kind}</i></h1>
           <p className="sub">{cs.summary}</p>
-          {cs.steps && <Figure n={1} steps={cs.steps} caption={cs.caption} />}
-          {cs.diagram && <Diagram n={1} {...cs.diagram} />}
+          {cs.diagram ? <Diagram n={1} {...cs.diagram} /> : cs.steps && <Figure n={1} steps={cs.steps} caption={cs.caption} />}
           <div className="md">
             {cs.sections.map((s) => (
               <section key={s.h} className="md">
@@ -48,6 +47,7 @@ function CaseStudy({ cs }) {
                     </table>
                   </div>
                 )}
+                {s.list && <ul>{s.list.map((t, i) => <li key={i}>{t}</li>)}</ul>}
                 {(s.after || []).map((t, i) => <p key={"a" + i}>{t}</p>)}
               </section>
             ))}
