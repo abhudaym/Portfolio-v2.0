@@ -128,3 +128,10 @@ main { display: flex; flex-direction: column; gap: 64px; }
 .tw button:hover { color: var(--accent); }
 
 @media print { .masthead nav, .colophon, .back, .toc { display: none; } body { font-size: 11pt; } }
+
+/* architecture diagrams */
+.diagram { overflow-x: auto; color: var(--ink); padding: 4px 0; }
+.diagram svg { display: block; width: 100%; min-width: 560px; max-width: 734px; height: auto; }
+.dg-label { font-family: var(--mono); font-size: 13px; font-weight: 500; fill: currentColor; }
+.dg-sub { font-family: var(--mono); font-size: 10.5px; fill: var(--grey); }
+.dg-edge { font-family: var(--serif); font-style: italic; font-size: 14px; fill: var(--grey); }
